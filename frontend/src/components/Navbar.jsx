@@ -6,10 +6,10 @@ function Navbar() {
     <nav className="flex justify-around items-center h-18 w-full bg-amber-600 ">
       <div className="flex items-center gap-0.5 text-amber-100">
       <div className="font-licorice font-bold text-3xl">BrainBox</div>
-        <div className="text-white -translate-y-1"><Logo/></div>
+        <div className="text-white"><Logo/></div>
       </div>
-      <div className="text-white cursor hover:bg-amber-800">
-        <Link className="py-4 px-2 text-lg font-semibold block" to={'login'}>Log in </Link>
+      <div className="text-white cursor hover:text-amber-800">
+        <Link className="py-4 px-2 text-lg font-semibold block" to={'login'}>LOGIN</Link>
       </div>
     </nav>
     </>

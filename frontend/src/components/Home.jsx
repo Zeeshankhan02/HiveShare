@@ -1,10 +1,8 @@
-import { href, Link } from "react-router-dom"
-import Card from "./Card"
+import {  Link } from "react-router-dom"
 import { motion } from 'framer-motion';
+import Card from "./Card"
 import Navbar from "./Navbar"
-import { Bookmarks } from "./svgs/Boomark";
-import { Youtube } from "./svgs/Youtube";
-import { LinkedIn } from "./svgs/LinkedIn";
+import { Bookmarks,Youtube,LinkedIn  } from "./svgs/icons";
 
 function Home() {
 
@@ -45,8 +43,8 @@ function Home() {
   return (
     <>
       <div className="overflow-x-hidden absolute -z-10 inset-0 h-full w-full 
-bg-[radial-gradient(circle,#73737350_1px,transparent_1px)] 
-bg-[size:10px_10px]">
+        bg-[radial-gradient(circle,#73737350_1px,transparent_1px)] 
+        bg-[size:10px_10px]">
         <Navbar />
 
         {/* Hero */}
@@ -60,22 +58,22 @@ bg-[size:10px_10px]">
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3, duration: 0.6 }}
-              className="text-gray-500 text-xl font-medium transition-opacity duration-700">
-              Save, organize, and rediscover your favorite posts and videos from anywhere - all in one smart space.</motion.h4>
+              className="text-gray-500 text-xl font-medium">
+              Save, organize, and <span className="font-bold underline underline-offset-2 text-gray-900/80">rediscover</span> your favorite posts and videos <br /> from anywhere - all in one <span className="text-green-600 font-bold font-licorice ">smart space</span>.</motion.h4>
             <motion.div className="mt-2" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5 }} >
-              <Link to={'sign-up'} className="py-2 px-6 rounded-2xl  bg-cyan-500 text-white text-lg font-semibold hover:bg-cyan-600 transition-all" >Get Started</Link>
+              <Link to={'sign-up'} className="py-3 px-8 rounded-2xl inset-shadow-sm/80 inset-shadow-amber-600 text-neutral-500 text-lg font-semibold hover:bg-amber-500 hover:text-white transition-all " >Get Started </Link>
             </motion.div>
           </div>
         </div>
 
         {/* Features */}
-        <div className="flex justify-center items-center flex-col gap-8">
-          <h1 className="text-4xl font-bold tracking-wide underline">Features</h1>
+        <div className="flex justify-center items-center flex-col gap-8 mt-4">
+          <h1 className="text-4xl font-bold  underline underline-offset-3 tracking-tight">Features</h1>
           <div className="flex justify-center gap-8 mt-4">
             {features.map((f, i) => <motion.div key={i}
               initial={{ opacity: 0, y: 40 }}
               whileInView={{ opacity: 1, y: 0 }}
-              transition={{ delay: i * 0.2 }}>
+              transition={{ delay: i * 0.1 }}>
               <Card src={f.src} title={f.title} desc={f.desc} href={f.href} className={'w-80 h-60'} />
             </motion.div>
             )}

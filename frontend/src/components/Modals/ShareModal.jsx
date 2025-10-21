@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 function ShareModal({ showShareModal, setShowShareModal }) {
   const [loading, setLoading] = useState(false);
   const [shareLink, setShareLink] = useState("");
+  const id = Math.floor(Math.random()*10000)
 
 
   const handleShare = async () => {
@@ -13,7 +14,7 @@ function ShareModal({ showShareModal, setShowShareModal }) {
     try {
       // Simulate backend request
       const res = await new Promise((resolve) =>
-        setTimeout(() => resolve({ data: { url: "https://secondbrain.app/u/zeeshan/posts" } }), 2000)
+        setTimeout(() => resolve({ data: { url: `${window.location.origin}/shareable/${id}`}}), 2000)
       );
       setShareLink(res.data.url);
     } catch (err) {
