@@ -1,19 +1,14 @@
-import { useState } from "react";
-import { NavLink,  useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import axios from "axios"
 import AddLinkModal from "./Modals/AddLinkModal";
 import ShareModal from "./Modals/ShareModal";
 import {
-  Youtube,
   PlusIcon,
   ShareIcon,
-  Instagram,
-  TwitterIcon,
-  LinkedIn,
-  Globe,
-  CrossIcon,
-  Facebook
 } from "./svgs/icons";
-import { Logo } from "./svgs/Logo";
+import Posts from "./Posts";
+import Sidebar from "./Sidebar";
 
 
 function Saved() {
@@ -21,87 +16,117 @@ function Saved() {
   const [showModal, setShowModal] = useState(false);
   const [showShareModal, setShowShareModal] = useState(false);
   const [loader, setLoader] = useState(false)
-  const [data, setData] = useState([])
+  const [data, setData] = useState([, {
+    title: "Elon Musk's take on AI",
+    description: "This is how we do it",
+    link: "https://x.com/elonmusk/status/1964395588927000801",
+    category: "tweet"
+  },{
+    title: "Big Bang Theory",
+    description: "This is how we do it",
+    link: "https://www.youtube.com/watch?v=-2RAq5o5pwc",
+    category: "youtube"
+  },{
+    title: "Big Bang Theory",
+    description: "This is how we do it",
+    link: "https://www.youtube.com/watch?v=0WD6vxQz5-I&list=RD0WD6vxQz5-I&start_radio=1",
+    category: "youtube"
+  },{
+    title: "Big Bang Theory",
+    description: "This is how we do it",
+    link: "https://www.instagram.com/p/BdJRABkDbXU/",
+    category: "instagram"
+  },,{
+    title: "Big Bang Theory",
+    description: "This is how we do it",
+    link: '<iframe src="https://www.linkedin.com/embed/feed/update/urn:li:share:7386341166176272384?collapsed=1"title="Embedded post"></iframe>',
+    category: "linkedin"
+  },{
+    title: "Big Bang Theory",
+    description: "This is how we do it",
+    link: "https://www.instagram.com/p/BT8cmZRlkVJ/",
+    category: "instagram"
+  },])
 
-  const {category} = useParams()
 
-  const sidebarItems = [
-    {
-      text: "All",
-      icon: Globe
-    }, {
-      text: "Youtube",
-      icon: Youtube
-    }, {
-      text: "Instagram",
-      icon: Instagram
-    }, {
-      text: "Facebook",
-      icon: Facebook
-    }, {
-      text: "Twitter",
-      icon: TwitterIcon
-    }, {
-      text: "Linkedin",
-      icon: LinkedIn
-    }
-  ]
+
+  const { category } = useParams()
+  useEffect(() => {
+    window?.twttr?.widgets?.load();
+    window?.instgrm?.Embeds?.process?.();
+  }, [data]);
+
 
   return (
-    <div className="flex h-screen">
-      {/* Sidebar */}
-      <div className="w-[20%] min-h-full bg-amber-400 p-6">
-          <div className="flex items-center p-1">
-            <h3 className="font-licorice font-black text-2xl">BrainBox</h3>
-            <Logo />
-        </div>
-
-        <div className="flex flex-col gap-1 justify-center mt-12">
-        {sidebarItems.map((item, idx) => (
-          <NavLink
-            to={`/saved/${item.text.toLowerCase()}`}
-            key={idx}
-            className={({ isActive }) =>
-              `flex items-center gap-2 p-1 border-b-2 border-amber-300 hover:bg-gray-400 hover:rounded-md cursor-pointer transition-colors ${
-                isActive ? "bg-gray-200 rounded-md" : ""
-              }`
-            }
-          >
-            <item.icon className="w-10 h-10" />
-            <h3 className="text-lg">{item.text}</h3>
-          </NavLink>
-        ))}
-      </div>
-
-      </div>
-
-      {/* Main Content Area */}
-      <div className="flex-1 flex flex-col">
-        {/* Navbar */}
-        <header className="h-18  flex items-center relative px-6 shadow-sm backdrop-blur-2xl bg-amber-50">
-          <h1 className="text-2xl font-semibold font-macondo">{category.toUpperCase()}</h1>
-          <div className="flex gap-x-6 absolute right-4">
-            <button className="cursor-pointer flex items-center text-lg font-medium justify-center py-2 px-8 bg-black text-white rounded-lg gap-x-1 hover:bg-zinc-700 hover:text-neutral-200 transition-all" onClick={() => setShowModal(true)}>Add Content <PlusIcon /></button>
-            <button className="cursor-pointer flex items-center text-lg font-medium justify-center py-2 px-8 bg-blue-600 text-white rounded-lg gap-x-1" onClick={() => setShowShareModal(true)}>Share <ShareIcon /></button>
-          </div>
-        </header>
-
-        {/* Page Content */}
-        <main className="flex-1 p-6 bg-gray-50 overflow-y-auto">
-          <div> <AddLinkModal showModal={showModal} setShowModal={setShowModal} />
-          <ShareModal showShareModal={showShareModal} setShowShareModal={setShowShareModal} />
-            {
-              loader ? <p className="animate-bounce [animation-duration:0.5s] text-xl "><span className="animate-pulse [animation-duration:0.2s]">loading...</span></p> : data.length > 0 ? <div>{category}</div> : <div className="w-80 h-fit ">
-                <img className="w-full rounded-2xl" src="https://media.tenor.com/kQPucvx-gccAAAAM/it%27s-empty-om-nom.gif" alt="Empty Gif" />
-                <p className="text-2xl px-2">Nothing To Show Here please add something🥲</p>
-              </div>
-            }
-          </div>
-          
-        </main>
-      </div>
-
+    <div className="flex h-screen overflow-y-hidden">
+    <div className="min-w-72">
+    <Sidebar />
     </div>
+
+    {/* Main Area */}
+    <div className="flex flex-col flex-1 overflow-hidden">
+      {/* Navbar */}
+      <header className="flex items-center justify-between px-6 py-3 shadow-sm backdrop-blur-md bg-white/70">
+        <h1 className="text-2xl font-semibold font-macondo tracking-wide">
+          {category.toUpperCase()}
+        </h1>
+
+        <div className="flex gap-4">
+          <button
+            onClick={() => setShowModal(true)}
+            className="flex items-center justify-center gap-2 px-6 py-2 text-lg font-medium text-white bg-black rounded-lg transition-all hover:bg-zinc-700 hover:scale-105 active:scale-100"
+          >
+            Add Content <PlusIcon />
+          </button>
+
+          <button
+            onClick={() => setShowShareModal(true)}
+            className="flex items-center justify-center gap-2 px-6 py-2 text-lg font-medium text-white bg-blue-600 rounded-lg transition-all hover:bg-blue-700 hover:scale-105 active:scale-100"
+          >
+            Share <ShareIcon />
+          </button>
+        </div>
+      </header>
+
+      <AddLinkModal showModal={showModal} setShowModal={setShowModal} />
+      <ShareModal showShareModal={showShareModal} setShowShareModal={setShowShareModal}
+      />
+
+      {/* Page Content */}
+      <main className="flex-1 p-6 overflow-y-auto bg-gray-50">
+        {loader ? (
+          <p className="text-xl font-medium animate-bounce [animation-duration:0.5s]">
+            <span className="animate-pulse [animation-duration:0.3s]">
+              loading...
+            </span>
+          </p>
+        ) : data.length > 0 ? (
+          <div className="columns-1 sm:columns-2 lg:columns-3 gap-6 space-y-6">
+            {data.reverse().map((item, idx) => (
+              <Posts
+                key={idx}
+                title={item.title}
+                desc={item.description}
+                link={item.link}
+                category={item.category}
+              />
+            ))}
+          </div>
+        ) : (
+          <div className="flex flex-col items-center w-80 text-center">
+            <img
+              className="w-full rounded-2xl"
+              src="https://media.tenor.com/kQPucvx-gccAAAAM/it%27s-empty-om-nom.gif"
+              alt="Empty Gif"
+            />
+            <p className="mt-2 text-2xl">
+              Nothing to show here — please add something 🥲
+            </p>
+          </div>
+        )}
+      </main>
+    </div>
+  </div>
   );
 }
 

@@ -61,7 +61,7 @@ function Home() {
               className="text-gray-500 text-xl font-medium">
               Save, organize, and <span className="font-bold underline underline-offset-2 text-gray-900/80">rediscover</span> your favorite posts and videos <br /> from anywhere - all in one <span className="text-green-600 font-bold font-licorice ">smart space</span>.</motion.h4>
             <motion.div className="mt-2" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5 }} >
-              <Link to={'sign-up'} className="py-3 px-8 rounded-2xl inset-shadow-sm/80 inset-shadow-amber-600 text-neutral-500 text-lg font-semibold hover:bg-amber-500 hover:text-white transition-all " >Get Started </Link>
+              <Link to={'sign-up'} className="py-3 px-8 rounded-2xl inset-shadow-sm/80 inset-shadow-amber-600 text-neutral-500 text-lg font-semibold hover:bg-amber-500 hover:text-white transition-all shadow-xl/15 " >Get Started </Link>
             </motion.div>
           </div>
         </div>
