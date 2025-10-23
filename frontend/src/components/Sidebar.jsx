@@ -5,7 +5,6 @@ import { Facebook, Globe, Instagram, LinkedIn, Twitter, Youtube } from './svgs/i
 import { NavLink } from 'react-router-dom'
 
 function Sidebar() {
-
   
   const sidebarItems = [
     {

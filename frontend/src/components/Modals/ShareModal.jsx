@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 
 function ShareModal({ showShareModal, setShowShareModal }) {
   const [loading, setLoading] = useState(false);
+    // const [showShareModal, setShowShareModal] = useState(false);
   const [shareLink, setShareLink] = useState("");
   const id = Math.floor(Math.random()*10000)
 

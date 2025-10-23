@@ -1,7 +1,7 @@
 import {  Link } from "react-router-dom"
 import { motion } from 'framer-motion';
 import Card from "./Card"
-import Navbar from "./Navbar"
+import {HomeNavbar} from "./Navbar"
 import { Bookmarks,Youtube,LinkedIn  } from "./svgs/icons";
 
 function Home() {
@@ -25,17 +25,17 @@ function Home() {
   ]
   const testimonials = [
     {
-      title: 'Amaan Ur Rahman',
+      title: 'Sherlock Holmes',
       desc: 'As someone who consumes content across multiple platforms, having everything in one place is a game-changer',
       href: "https://media.istockphoto.com/id/480585465/photo/who-is-the-boss.jpg?s=612x612&w=0&k=20&c=6HGMxKLOZWJmwDEF0Gb16C0BcnMmY7bvAy3NKmrOW6A="
     },
     {
-      title: 'Categorize by Platform',
+      title: 'Jhon Smith',
       desc: 'Industry insights from LinkedIn, competitor analysis from Twitter, and tutorial videos from YouTube - all organized by project',
       href: "https://thumbs.dreamstime.com/b/orangutan-baby-funny-face-months-old-31287963.jpg"
     },
     {
-      title: 'Add Notes & Titles',
+      title: 'James Moriarty',
       desc: 'Finally stopped losing those "watch later" items across different platforms',
       href: "https://media.istockphoto.com/id/986720632/photo/close-up-snowy-owl-eye-with-wooden-background.webp?b=1&s=612x612&w=0&k=20&c=iNCPJWyoIBgOjnzTX3v05ECEBB79vqfBKkNjzgFOxOw="
     }
@@ -45,7 +45,7 @@ function Home() {
       <div className="overflow-x-hidden absolute -z-10 inset-0 h-full w-full 
         bg-[radial-gradient(circle,#73737350_1px,transparent_1px)] 
         bg-[size:10px_10px]">
-        <Navbar />
+        <HomeNavbar />
 
         {/* Hero */}
         <div className="h-[35%] flex justify-center items-center w-full">

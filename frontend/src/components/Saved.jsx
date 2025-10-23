@@ -1,26 +1,29 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios"
-import AddLinkModal from "./Modals/AddLinkModal";
-import ShareModal from "./Modals/ShareModal";
-import {
-  PlusIcon,
-  ShareIcon,
-} from "./svgs/icons";
 import Posts from "./Posts";
 import Sidebar from "./Sidebar";
+import {DashboardNavbar} from "./Navbar"
 
 
 function Saved() {
-
-  const [showModal, setShowModal] = useState(false);
-  const [showShareModal, setShowShareModal] = useState(false);
   const [loader, setLoader] = useState(false)
-  const [data, setData] = useState([, {
+  const { category } = useParams()
+
+  useEffect(()=>{
+    window.twttr?.widgets?.load();
+  },[category])
+
+  const [data, setData] = useState([{
     title: "Elon Musk's take on AI",
     description: "This is how we do it",
     link: "https://x.com/elonmusk/status/1964395588927000801",
-    category: "tweet"
+    category: "twitter"
+  },{
+    title: "Elon Musk's take on AI",
+    description: "This is how we do it",
+    link: "https://x.com/elonmusk/status/1964395588927000801",
+    category: "twitter"
   },{
     title: "Big Bang Theory",
     description: "This is how we do it",
@@ -36,7 +39,7 @@ function Saved() {
     description: "This is how we do it",
     link: "https://www.instagram.com/p/BdJRABkDbXU/",
     category: "instagram"
-  },,{
+  },{
     title: "Big Bang Theory",
     description: "This is how we do it",
     link: '<iframe src="https://www.linkedin.com/embed/feed/update/urn:li:share:7386341166176272384?collapsed=1"title="Embedded post"></iframe>',
@@ -49,15 +52,11 @@ function Saved() {
   },])
 
 
+  const filteredData = category === "all"
+  ? data
+  : data.filter(item => item.category === category);
 
-  const { category } = useParams()
-  useEffect(() => {
-    window?.twttr?.widgets?.load();
-    window?.instgrm?.Embeds?.process?.();
-  }, [data]);
-
-
-  return (
+    return (
     <div className="flex h-screen overflow-y-hidden">
     <div className="min-w-72">
     <Sidebar />
@@ -66,31 +65,8 @@ function Saved() {
     {/* Main Area */}
     <div className="flex flex-col flex-1 overflow-hidden">
       {/* Navbar */}
-      <header className="flex items-center justify-between px-6 py-3 shadow-sm backdrop-blur-md bg-white/70">
-        <h1 className="text-2xl font-semibold font-macondo tracking-wide">
-          {category.toUpperCase()}
-        </h1>
+      <DashboardNavbar category={category} />
 
-        <div className="flex gap-4">
-          <button
-            onClick={() => setShowModal(true)}
-            className="flex items-center justify-center gap-2 px-6 py-2 text-lg font-medium text-white bg-black rounded-lg transition-all hover:bg-zinc-700 hover:scale-105 active:scale-100"
-          >
-            Add Content <PlusIcon />
-          </button>
-
-          <button
-            onClick={() => setShowShareModal(true)}
-            className="flex items-center justify-center gap-2 px-6 py-2 text-lg font-medium text-white bg-blue-600 rounded-lg transition-all hover:bg-blue-700 hover:scale-105 active:scale-100"
-          >
-            Share <ShareIcon />
-          </button>
-        </div>
-      </header>
-
-      <AddLinkModal showModal={showModal} setShowModal={setShowModal} />
-      <ShareModal showShareModal={showShareModal} setShowShareModal={setShowShareModal}
-      />
 
       {/* Page Content */}
       <main className="flex-1 p-6 overflow-y-auto bg-gray-50">
@@ -102,13 +78,15 @@ function Saved() {
           </p>
         ) : data.length > 0 ? (
           <div className="columns-1 sm:columns-2 lg:columns-3 gap-6 space-y-6">
-            {data.reverse().map((item, idx) => (
+            {filteredData.reverse().map((item, idx) => (
               <Posts
                 key={idx}
                 title={item.title}
                 desc={item.description}
                 link={item.link}
                 category={item.category}
+                data={data}
+                setData={setData}
               />
             ))}
           </div>
