@@ -7,7 +7,7 @@ import RandomRoute from "./components/RandomRoute"
 
 function App() {
   return (
-    <BrowserRouter>
+   <BrowserRouter>
       <Routes>
 
         <Route index element={<Home />} />

@@ -29,7 +29,7 @@ export function DashboardNavbar({ category }) {
   const [showShareModal, setShowShareModal] = useState(false);
   return (
     <>
-      <header className="flex items-center justify-between px-6 py-3 shadow-sm backdrop-blur-md bg-white/70">
+      <header className="flex items-center justify-between px-6 py-3 shadow-sm bg-white/70">
         <h1 className="text-2xl font-semibold font-macondo tracking-wide">
           {category.toUpperCase()}
         </h1>
