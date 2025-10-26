@@ -1,5 +1,5 @@
-import { Logo } from './svgs/Logo'
-import { Globe, Instagram, IsFavorite, LinkedIn, Twitter, Youtube } from './svgs/icons'
+import { Logo } from '../svgs/Logo'
+import { Globe, Instagram, IsFavorite, LinkedIn, Twitter, Youtube } from '../svgs/icons'
 import { NavLink } from 'react-router-dom'
 
 function Sidebar() {

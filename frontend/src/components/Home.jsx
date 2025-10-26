@@ -2,7 +2,7 @@ import {  Link } from "react-router-dom"
 import { motion } from 'framer-motion';
 import Card from "./Card"
 import {HomeNavbar} from "./Navbar"
-import { Bookmarks,Youtube,LinkedIn  } from "./svgs/icons";
+import { Bookmarks,Youtube,LinkedIn  } from "../svgs/icons";
 
 function Home() {
 

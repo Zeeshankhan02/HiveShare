@@ -1,8 +1,7 @@
-import { useState } from 'react';
 import { extractIframeSrc, extractYoutubeId, getInstagramEmbedUrl } from '../utils/extractId.js'
-import { DeleteIcon,  Instagram, IsFavorite, IsNotFavorite, LinkedIn, Twitter, Youtube } from './svgs/icons';
+import { DeleteIcon, Instagram, IsFavorite, IsNotFavorite, LinkedIn, Twitter, Youtube } from '../svgs/icons.jsx';
 
-function Posts({ title, desc, link, category, fav, data,setData }) {
+function Posts({ title, desc, link, category, fav, data, setData }) {
 
   const videoId = category === "youtube" ? extractYoutubeId(link) : null
   const iframeSrc = category === "linkedin" ? extractIframeSrc(link) : null;
@@ -18,14 +17,14 @@ function Posts({ title, desc, link, category, fav, data,setData }) {
             {category === "linkedin" && <LinkedIn />}
             <span className="font-bold">{title}</span>
           </div>
-          <div className='flex gap-3' >
-           <div>
-           {fav===true?<IsFavorite className={"fill-amber-300"}/>:<IsNotFavorite/>}
-           </div>
-          <div>
-          <DeleteIcon  data={data} setData={setData} /> 
-          </div>
-          </div>
+          {(location.href == `${location.origin}/saved/all` || location.href == `${location.origin}/saved/${category}`) || location.href == `${location.origin}/saved/favorites` ? <div className='flex gap-3' >
+            <div>
+              {fav === true ? <IsFavorite className={"fill-amber-300"} /> : <IsNotFavorite />}
+            </div>
+            <div>
+              <DeleteIcon data={data} setData={setData} />
+            </div>
+          </div> : null}
         </div>
 
         {desc && <p className="font-medium mb-3 text-gray-700">{desc}</p>}
@@ -46,15 +45,15 @@ function Posts({ title, desc, link, category, fav, data,setData }) {
 
 
           {category === "twitter" && (
-              <div className='w-full'>
-                <blockquote className="twitter-tweet"><a href={`${link.replace("/x.com/","/twitter.com/")}?ref_src=twsrc%5Etfw`}></a></blockquote>
-              </div>
-              
+            <div className='w-full'>
+              <blockquote className="twitter-tweet"><a href={`${link.replace("/x.com/", "/twitter.com/")}?ref_src=twsrc%5Etfw`}></a></blockquote>
+            </div>
+
           )}
 
           {category === "instagram" && (
             <iframe
-            src={getInstagramEmbedUrl(link)}
+              src={getInstagramEmbedUrl(link)}
               width="100%"
               height="480"
               frameBorder="0"

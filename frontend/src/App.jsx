@@ -4,6 +4,7 @@ import SignUp from "./components/SignUp"
 import Login from "./components/Login"
 import Saved from "./components/Saved"
 import RandomRoute from "./components/RandomRoute"
+import Shareable from "./components/Shareable"
 
 function App() {
   return (
@@ -12,13 +13,15 @@ function App() {
 
         <Route index element={<Home />} />
         <Route path="sign-up" element={<SignUp />} />
-        <Route path="login" element={<Login />} />
+        <Route path="/login" element={<Login />} />
+
+        <Route path="/shared" element={<Shareable />} />
+        <Route path="/shared/:userId" element={<Shareable />} />
 
 
         {/* Dynamic category route */}
         <Route path="/saved/:category" element={<Saved />} />
         <Route path="saved" element={<Navigate to="/saved/all" replace />} />
-
         <Route path="*" element={<RandomRoute />} />
       </Routes>
     </BrowserRouter>

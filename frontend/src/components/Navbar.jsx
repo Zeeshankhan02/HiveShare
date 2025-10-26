@@ -1,11 +1,11 @@
 import { Link } from "react-router-dom"
-import { Logo } from "./svgs/Logo"
+import { Logo } from "../svgs/Logo"
 import {
   PlusIcon,
   ShareIcon,
-} from "./svgs/icons";
-import AddLinkModal from "./Modals/AddLinkModal";
-import ShareModal from "./Modals/ShareModal";
+} from "../svgs/icons";
+import AddLinkModal from "../Modals/AddLinkModal";
+import ShareModal from "../Modals/ShareModal";
 import { useState } from "react";
 
 export function HomeNavbar() {
@@ -17,7 +17,7 @@ export function HomeNavbar() {
           <div className="text-white"><Logo /></div>
         </div>
         <div className="text-white cursor hover:text-amber-800">
-          <Link className="py-4 px-2 text-lg font-semibold block" to={'login'}>LOGIN</Link>
+          <Link className="py-4 px-2 text-lg font-semibold block" to={'/login'}>LOGIN</Link>
         </div>
       </nav>
     </>
@@ -29,7 +29,7 @@ export function DashboardNavbar({ category }) {
   const [showShareModal, setShowShareModal] = useState(false);
   return (
     <>
-      <header className="flex items-center justify-between px-6 py-3 shadow-sm bg-white/70">
+      <header className="flex items-center justify-between px-6 py-3 shadow-sm bg-gray-100 border-b border-gray-300">
         <h1 className="text-2xl font-semibold font-macondo tracking-wide">
           {category.toUpperCase()}
         </h1>
