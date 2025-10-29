@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import axios from "axios"
 
 function SignUp() {
@@ -7,31 +7,32 @@ function SignUp() {
     fullName: '', email: '', password: ''
   })
 
+  const [loader, setLoader] = useState(false)
+  const navigate = useNavigate()
+
   function handleChange(e) {
     const { name, value } = e.target
     setInputValues(prev => ({ ...prev, [name]: value }))
   }
 
-  async function handleSignUp() {
-    try {
-      const res = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/signup`, {
-        data: inputValues
-      })
-
-
-    } catch (error) {
-
-    }
-
-  }
-
-
-  function handleSubmit(e) {
+  async function handleSignUp(e) {
     e.preventDefault()
-    console.log(inputValues);
+    setLoader(prev => !prev)
 
-
-
+    try {
+      const res = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/register`, inputValues, {
+        headers: { "Content-Type": "application/json" },
+      }
+      )
+      if (!res) {
+        // alert('Login failed please try again')
+      } else {
+        navigate("/login")
+      }
+    } catch (error) {
+      alert("Internel Server error")
+      setLoader(prev => !prev)
+    }
   }
 
   const inputs = [
@@ -59,32 +60,27 @@ function SignUp() {
         </div>
         <div className="w-[50%] flex items-center justify-center inset-shadow-sm/18 bg-gray-100/40 ">
           <div className="backdrop-blur-none">
-          <form onSubmit={handleSubmit}>
-            <div className="flex flex-col gap-y-4">
-              {inputs.map((input, idx) => (
-                <label key={idx} className="text-2xs font-medium">
-                  {input.label} <br />
-                  <input
-                    type={input.type}
-                    name={input.name}
-                    value={inputValues[input.name]}
-                    onChange={handleChange}
-                    className="border rounded-md px-2 py-1.5 w-80 focus:outline-none focus:ring-1 focus:ring-sky-400 hover:outline-1"
-                    autoComplete="off"
-                  />
-                </label>
-              ))}
-              <div className="text-sky-600">
-                <Link to="/login">Already have an acc?</Link>
+            <form onSubmit={handleSignUp}>
+              <div className="flex flex-col gap-y-4">
+                {inputs.map((input, idx) => (
+                  <label key={idx} className="text-2xs font-medium">
+                    {input.label} <br />
+                    <input
+                      type={input.type}
+                      name={input.name}
+                      value={inputValues[input.name]}
+                      onChange={handleChange}
+                      className="border rounded-md px-2 py-1.5 w-80 focus:outline-none focus:ring-1 focus:ring-sky-400 hover:outline-1"
+                      autoComplete="off"
+                    />
+                  </label>
+                ))}
+                <div className="text-sky-600">
+                  <Link to="/login">Already have an acc?</Link>
+                </div>
+                <button type="submit" className="bg-sky-600  py-2 rounded-lg w-60 text-lg font-semibold text-white cursor-pointer hover:bg-sky-500 transition-all" disabled={loader ? true : false}> {!loader ? <p>Sign Up</p> : <p className="animate-pulse [animation-duration:0.6s]">Signing Up...</p>}</button>
               </div>
-              <button
-                type="submit"
-                className="bg-sky-600  py-2 rounded-lg w-60 text-lg font-semibold text-white cursor-pointer hover:bg-sky-500 transition-all"
-              >
-                Sign Up
-              </button>
-            </div>
-          </form>
+            </form>
           </div>
         </div>
 

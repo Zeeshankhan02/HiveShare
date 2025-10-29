@@ -24,7 +24,7 @@ export function HomeNavbar() {
   )
 }
 
-export function DashboardNavbar({ category }) {
+export function DashboardNavbar({ category,onAdd }) {
   const [showModal, setShowModal] = useState(false);
   const [showShareModal, setShowShareModal] = useState(false);
   return (
@@ -52,7 +52,7 @@ export function DashboardNavbar({ category }) {
           </button>
         </div>
       </header>
-      <AddLinkModal showModal={showModal} setShowModal={setShowModal} />
+      <AddLinkModal showModal={showModal} setShowModal={setShowModal} onAdd={onAdd}/>
       <ShareModal showShareModal={showShareModal} setShowShareModal={setShowShareModal} />
     </>
   )

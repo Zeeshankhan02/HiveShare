@@ -16,7 +16,7 @@ function App() {
         <Route path="/login" element={<Login />} />
 
         <Route path="/shared" element={<Shareable />} />
-        <Route path="/shared/:userId" element={<Shareable />} />
+        <Route path="/shared/:user_id" element={<Shareable />} />
 
 
         {/* Dynamic category route */}

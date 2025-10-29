@@ -2,7 +2,7 @@ import { motion } from 'framer-motion'
 import Posts from './Posts';
 
 
-function PageContent({data,loader }) {
+function PageContent({ data, loader, category, onDelete }) {
   return (
     <main className="flex-1 p-6 overflow-y-auto">
       {loader ? (
@@ -23,13 +23,14 @@ function PageContent({data,loader }) {
               key={idx}
             >
               <Posts
+                post_id={item.post_id}
                 title={item.title}
                 desc={item.description}
-                link={item.link}
-                category={item.category}
-                // data={data}
-                // setData={setData}
-                fav={item.fav}
+                link={item.url}
+                platform={item.platform}
+                fav={item.is_favourite}
+                category={category}
+                onDelete={onDelete}
               />
             </motion.div>
           ))}
@@ -41,11 +42,11 @@ function PageContent({data,loader }) {
             src="https://media.tenor.com/kQPucvx-gccAAAAM/it%27s-empty-om-nom.gif"
             alt="Empty Gif"
           />
-         <div className="mt-2 text-2xl text-center">
-         <p>
-            Nothing to show here {location.href ==`${location.origin}/saved/all`|| location.href == `${location.origin}/saved/${category}` ?<span>please add something...🥲</span>:null}
-          </p>
-         </div>
+          <div className="mt-2 text-2xl text-center">
+            <p>
+              Nothing to show here {location.href == `${location.origin}/saved/all` || location.href == `${location.origin}/saved/${category}` ? <span>please add something...🥲</span> : null}
+            </p>
+          </div>
         </div>
       )}
     </main>

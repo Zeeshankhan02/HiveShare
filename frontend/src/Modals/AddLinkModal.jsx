@@ -1,24 +1,55 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import axios from "axios";
 
-export default function AddLinkModal({showModal,setShowModal,}) {
-  // const [showModal, setShowModal] = useState(false);
+export default function AddLinkModal({showModal,setShowModal,onAdd}) {
+  const [loader, setLoader] = useState(false);
   const [selectedTag, setSelectedTag] = useState(null);
-  const [link, setLink] = useState("");
+  const titleRef = useRef()
+  const descRef = useRef()
+  const linkRef = useRef()
 
   const tags = [
     { name: "Instagram", color: "bg-pink-500" },
-    { name: "Facebook", color: "bg-blue-600" },
+    { name: "X(Twitter)", color: "bg-neutral-900" },
     { name: "LinkedIn", color: "bg-sky-700" },
     { name: "YouTube", color: "bg-red-600" },
   ];
 
-  const handleSubmit = (e) => {
+  const data = {
+    title:titleRef.current?.value,
+    description:descRef.current?.value,
+    url:linkRef.current?.value,
+    platform:selectedTag
+  }
+  
+  const handleSubmit = async (e) => {
+    const token = localStorage.getItem("SBtoken")
     e.preventDefault();
-    console.log({ link, category: selectedTag });
-    setShowModal(false);
-    setLink("");
-    setSelectedTag(null);
+    setLoader(true)
+    try {
+      const res = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/posts`,data,{
+        headers:{
+          Authorization:`Bearer ${token}`
+        }
+      })
+      if (!res) {
+        alert("Failed to Add post")
+        setLoader(false)
+      }else{
+        setLoader(false)
+        setShowModal(false);
+        alert("post added")
+        titleRef.current.value="";
+        descRef.current.value="";
+        linkRef.current.value="";
+        setSelectedTag(null);
+        onAdd()
+      }
+    } catch (error) {
+      setLoader(false)
+      alert("Internel Server Error")
+    }
   };
 
   return (
@@ -59,13 +90,32 @@ export default function AddLinkModal({showModal,setShowModal,}) {
               <form onSubmit={handleSubmit} className="space-y-5">
                 <div>
                   <label className="text-sm font-medium text-gray-600 mb-1 block">
+                    Post title
+                  </label>
+                  <input
+                  ref={titleRef}
+                    type="text"
+                    placeholder="title"
+                    required
+                    className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-black focus:outline-none"
+                  />
+                  <label className="text-sm font-medium text-gray-600 mb-1 block">
+                    Paste description
+                  </label>
+                  <input
+                    type="text"
+                    ref={descRef}
+                    placeholder="description"
+                    required
+                    className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-black focus:outline-none"
+                  />
+                  <label className="text-sm font-medium text-gray-600 mb-1 block">
                     Paste your link
                   </label>
                   <input
                     type="url"
-                    value={link}
-                    onChange={(e) => setLink(e.target.value)}
-                    placeholder="https://example.com/your-post"
+                    ref={linkRef}
+                    placeholder="https://example.com"
                     required
                     className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-black focus:outline-none"
                   />
@@ -98,7 +148,7 @@ export default function AddLinkModal({showModal,setShowModal,}) {
                     type="submit"
                     className="w-full bg-black text-white py-2.5 rounded-lg font-medium hover:bg-gray-900 transition-all"
                   >
-                    Add
+                    {!loader?<p>Add</p>:<p className="animate-pulse">Adding...</p>}
                   </button>
                 </div>
               </form>

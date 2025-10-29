@@ -1,28 +1,28 @@
 import { extractIframeSrc, extractYoutubeId, getInstagramEmbedUrl } from '../utils/extractId.js'
 import { DeleteIcon, Instagram, IsFavorite, IsNotFavorite, LinkedIn, Twitter, Youtube } from '../svgs/icons.jsx';
 
-function Posts({ title, desc, link, category, fav, data, setData }) {
+function Posts({ post_id, title, desc, link, platform, fav, category, onDelete }) {
 
-  const videoId = category === "youtube" ? extractYoutubeId(link) : null
-  const iframeSrc = category === "linkedin" ? extractIframeSrc(link) : null;
+  const videoId = platform === "youtube" ? extractYoutubeId(link) : null
+  const iframeSrc = platform === "linkedin" ? extractIframeSrc(link) : null;
   return (
     <>
       <div className="break-inside-avoid p-4 bg-white rounded-xl shadow-md border border-gray-200">
         {/* Header */}
         <div className="flex justify-between items-center mb-3">
           <div className="flex items-center gap-2 ">
-            {category === "youtube" && <Youtube />}
-            {category === "twitter" && <Twitter />}
-            {category === "instagram" && <Instagram />}
-            {category === "linkedin" && <LinkedIn />}
+            {platform === "youtube" && <Youtube />}
+            {platform === "twitter" && <Twitter />}
+            {platform === "instagram" && <Instagram />}
+            {platform === "linkedin" && <LinkedIn />}
             <span className="font-bold">{title}</span>
           </div>
           {(location.href == `${location.origin}/saved/all` || location.href == `${location.origin}/saved/${category}`) || location.href == `${location.origin}/saved/favorites` ? <div className='flex gap-3' >
             <div>
-              {fav === true ? <IsFavorite className={"fill-amber-300"} /> : <IsNotFavorite />}
+              {fav === true ? <IsFavorite className={"fill-red-600"} /> : <IsNotFavorite />}
             </div>
             <div>
-              <DeleteIcon data={data} setData={setData} />
+              <DeleteIcon post_id={post_id} onDelete={onDelete} />
             </div>
           </div> : null}
         </div>
@@ -31,7 +31,7 @@ function Posts({ title, desc, link, category, fav, data, setData }) {
 
         {/* Embeds */}
         <div className='flex justify-center'>
-          {category === "youtube" && (
+          {platform === "youtube" && (
             <iframe
               className="w-full rounded-md aspect-video"
               src={`https://www.youtube.com/embed/${videoId}`}
@@ -44,14 +44,14 @@ function Posts({ title, desc, link, category, fav, data, setData }) {
           )}
 
 
-          {category === "twitter" && (
+          {platform === "twitter" && (
             <div className='w-full'>
               <blockquote className="twitter-tweet"><a href={`${link.replace("/x.com/", "/twitter.com/")}?ref_src=twsrc%5Etfw`}></a></blockquote>
             </div>
 
           )}
 
-          {category === "instagram" && (
+          {platform === "instagram" && (
             <iframe
               src={getInstagramEmbedUrl(link)}
               width="100%"
@@ -65,7 +65,7 @@ function Posts({ title, desc, link, category, fav, data, setData }) {
           )}
 
 
-          {category === "linkedin" && (
+          {platform === "linkedin" && (
             <iframe
               src={iframeSrc}
               title="Embedded post"

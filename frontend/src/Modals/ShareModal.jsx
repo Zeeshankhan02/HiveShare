@@ -1,27 +1,40 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 
 function ShareModal({ showShareModal, setShowShareModal }) {
   const [loading, setLoading] = useState(false);
-    // const [showShareModal, setShowShareModal] = useState(false);
   const [shareLink, setShareLink] = useState("");
-  const id = Math.floor(Math.random()*10000)
-
+  const navigate = useNavigate()
 
   const handleShare = async () => {
-    setLoading(true);
+    const token = localStorage.getItem('SBtoken')
+    if (!token) {
+      alert("please login first")
+      navigate('/login')
+    }
+    else{
+      setLoading(true);
     setShareLink(""); // reset
     try {
-      // Simulate backend request
-      const res = await new Promise((resolve) =>
-        setTimeout(() => resolve({ data: { url: `${window.location.origin}/shareable/${id}`}}), 2000)
-      );
-      setShareLink(res.data.url);
+      const res = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/share-link`,{
+        headers:{
+          Authorization:`Bearer ${token}`
+        }
+      })
+
+      if (!res) {
+        alert("Failed to generate shareable link")
+      }else{
+        setShareLink(`${window.location.origin}/shared/${res.data.shared_id}`);
+      }
     } catch (err) {
-      console.error(err);
+      alert("Internel Server Error")
     } finally {
       setLoading(false);
+    }
     }
   };
 

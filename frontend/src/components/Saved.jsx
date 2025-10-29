@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios"
 import Sidebar from "./Sidebar";
 import { DashboardNavbar } from "./Navbar"
@@ -9,6 +9,7 @@ import PageContent from "./PageContent";
 function Saved() {
 
   const [loader, setLoader] = useState(false)
+  const navigate = useNavigate()
   const { category } = useParams()
   useEffect(() => {
     window.twttr?.widgets?.load();
@@ -16,61 +17,43 @@ function Saved() {
 
 
 
-  const [data, setData] = useState(
-    [
-      {
-        title: "Elon Musk's take on AI",
-        description: "This is how we do it",
-        link: "https://x.com/elonmusk/status/1964395588927000801",
-        category: "twitter"
-      },{
-        title: "Elon Musk's take on AI",
-        description: "This is how we do it",
-        link: "https://x.com/elonmusk/status/1964395588927000801",
-        category: "twitter"
-      }, {
-        title: "Elon Musk's take on AI",
-        description: "This is how we do it",
-        link: "https://x.com/elonmusk/status/1964395588927000801",
-        category: "twitter"
-      }, {
-        title: "Former US President",
-        description: "This is how we do it",
-        link: "https://x.com/BarackObama/status/1981131010894156289",
-        category: "twitter"
-      }, {
-        title: "Big Bang Theory",
-        description: "This is how we do it",
-        link: "https://www.youtube.com/watch?v=-2RAq5o5pwc",
-        category: "youtube"
-      }, {
-        title: "Big Bang Theory",
-        description: "This is how we do it",
-        link: "https://www.youtube.com/watch?v=0WD6vxQz5-I&list=RD0WD6vxQz5-I&start_radio=1",
-        category: "youtube"
-      }, {
-        title: "Big Bang Theory",
-        description: "This is how we do it",
-        link: "https://www.instagram.com/reel/DQJpuaCEl0V/?igsh=ZWszN2Z3Y2NxdW8z",
-        category: "instagram",
-        fav: true
-      }, {
-        title: "Big Bang Theory",
-        description: "This is how we do it",
-        link: '<iframe src="https://www.linkedin.com/embed/feed/update/urn:li:share:7386341166176272384?collapsed=1"title="Embedded post"></iframe>',
-        category: "linkedin"
-      }, {
-        title: "Big Bang Theory",
-        description: "This is how we do it",
-        link: "https://www.instagram.com/p/BT8cmZRlkVJ/",
-        category: "instagram"
+  const [data, setData] = useState([])
+
+    async function fetchData(){
+      const token = localStorage.getItem("SBtoken")
+      if (!token) {
+        alert("please login first")
+        navigate("/login")
       }
-    ])
+      try {
+        const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/posts`,{
+          headers:{
+            Authorization:`Bearer ${token}`
+          }
+        })
+        if(!response){
+          alert("failed to Fetch data")
+        }else{
+          setData(response.data)
+        }
+
+      } catch (error) {
+        console.log(error); 
+        alert("Internel Server Error")
+        setLoader(false)
+      }finally{
+        setLoader(false)
+      }
+    }
+
+    useEffect(()=>{
+      fetchData()
+    },[])
 
   const filteredData = category === "all"
     ? data
-    : category === "favorites" ? data.filter(item => item.fav === true)
-      : data.filter(item => item.category === category);
+    : category === "favorites" ? data.filter(item => item.is_favourite === true)
+      : data.filter(item => item.platform === category);
 
   return (
     <div className="flex h-screen ">
@@ -82,10 +65,10 @@ function Saved() {
       {/* Main Area */}
       <div className="main flex flex-col flex-1 bg-gray-50 overflow-hidden">
         {/* Navbar */}
-        <DashboardNavbar category={category} />
+        <DashboardNavbar category={category} onAdd={fetchData}/>
 
         {/* Page Content */}
-        <PageContent data={filteredData} loader={loader} />
+        <PageContent onDelete={fetchData} data={filteredData} loader={loader} category={category}/>
 
       </div>
     </div>
