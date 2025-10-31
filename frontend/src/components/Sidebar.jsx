@@ -1,37 +1,52 @@
-import { Logo } from '../svgs/Logo'
-import { Globe, Instagram, IsFavorite, LinkedIn, Twitter, Youtube } from '../svgs/icons'
-import { NavLink } from 'react-router-dom'
+import axios from "axios";
+import { Logo } from "../svgs/Logo";
+import {
+  Globe,
+  Instagram,
+  IsFavorite,
+  LinkedIn,
+  LogOut,
+  Twitter,
+  Youtube,
+} from "../svgs/icons";
+import { NavLink, useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 function Sidebar() {
-  
   const sidebarItems = [
     {
       text: "All",
-      icon: Globe
-    }, {
+      icon: Globe,
+    },
+    {
       text: "Youtube",
-      icon: Youtube
-    }, {
+      icon: Youtube,
+    },
+    {
       text: "Instagram",
-      icon: Instagram
-    },  {
+      icon: Instagram,
+    },
+    {
       text: "Twitter",
-      icon: Twitter
-    }, {
+      icon: Twitter,
+    },
+    {
       text: "Linkedin",
-      icon: LinkedIn
-    }, {
+      icon: LinkedIn,
+    },
+    {
       text: "Favorites",
-      icon: IsFavorite
-    }
-  ]
+      icon: IsFavorite,
+    },
+  ];
+  const navigate = useNavigate();
 
   return (
-  <>
-     {/* Sidebar */}
-     <div className=" min-h-full bg-amber-400 p-6">
-        <a href='/' className="inline-flex items-center">
-          <div className="font-licorice font-black text-2xl">BrainBox</div>
+    <>
+      {/* Sidebar */}
+      <div className=" min-h-full bg-amber-400 p-6">
+        <a href="/" className="inline-flex items-center">
+          <div className="font-licorice font-black text-2xl">HiveShare</div>
           <Logo />
         </a>
 
@@ -41,7 +56,8 @@ function Sidebar() {
               to={`/saved/${item.text.toLowerCase()}`}
               key={idx}
               className={({ isActive }) =>
-                `flex items-center gap-2 p-1 border-b-2 border-amber-300 hover:bg-gray-400 hover:rounded-md cursor-pointer transition-colors ${isActive ? "bg-gray-200 rounded-md" : ""
+                `flex items-center gap-2 p-1 border-b-2 border-amber-300 hover:bg-gray-400 hover:rounded-md cursor-pointer transition-colors ${
+                  isActive ? "bg-gray-200 rounded-md" : ""
                 }`
               }
             >
@@ -51,9 +67,42 @@ function Sidebar() {
           ))}
         </div>
 
+        <div className="flex flex-col gap-1 justify-center mt-12 absolute bottom-4">
+          <NavLink
+            to="/login"
+            onClick={async (e) => {
+              e.preventDefault(); // prevent immediate navigation
+              try {
+                const token = localStorage.getItem("SBtoken");
+                const res = await axios.post(
+                  `${import.meta.env.VITE_BACKEND_URL}/logout`,
+                  {}, // request body (empty)
+                  {
+                    headers: {
+                      Authorization: `Bearer ${token}`,
+                    },
+                  }
+                );
+
+                localStorage.removeItem("SBtoken");
+                // Navigate manually after success
+                if (res.status === 200) {
+                  navigate("/login");
+                  toast.success(res.data.message);
+                }
+              } catch (error) {
+                alert("Error logging out. Please try again.");
+              }
+            }}
+            className="flex items-center gap-1 p-1 border-amber-300 hover:bg-gray-400 hover:rounded-md cursor-pointer transition-colors"
+          >
+            <LogOut className="w-10 h-10" />
+            <h3 className="text-lg">LogOut</h3>
+          </NavLink>
+        </div>
       </div>
-  </>
-  )
+    </>
+  );
 }
 
-export default Sidebar
+export default Sidebar;

@@ -3,38 +3,43 @@ import { motion, AnimatePresence } from "framer-motion";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-
 function ShareModal({ showShareModal, setShowShareModal }) {
   const [loading, setLoading] = useState(false);
   const [shareLink, setShareLink] = useState("");
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const handleShare = async () => {
-    const token = localStorage.getItem('SBtoken')
-    if (!token) {
-      alert("please login first")
-      navigate('/login')
-    }
-    else{
-      setLoading(true);
-    setShareLink(""); // reset
-    try {
-      const res = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/share-link`,{
-        headers:{
-          Authorization:`Bearer ${token}`
-        }
-      })
+    const token = localStorage.getItem("SBtoken");
 
-      if (!res) {
-        alert("Failed to generate shareable link")
-      }else{
-        setShareLink(`${window.location.origin}/shared/${res.data.shared_id}`);
+    if (!token) {
+      alert("please login first");
+      navigate("/login");
+    } else {
+      setLoading(true);
+      setShareLink(""); // reset
+      try {
+        const res = await axios.post(
+          `${import.meta.env.VITE_BACKEND_URL}/share-link`,
+          {}, // request body (empty in this case)
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        if (!res) {
+          alert("Failed to generate shareable link");
+        } else {
+          setShareLink(
+            `${window.location.origin}/shared/${res.data.public_url}`
+          );
+        }
+      } catch (err) {
+        alert("Internel Server Error");
+      } finally {
+        setLoading(false);
       }
-    } catch (err) {
-      alert("Internel Server Error")
-    } finally {
-      setLoading(false);
-    }
     }
   };
 
@@ -54,7 +59,7 @@ function ShareModal({ showShareModal, setShowShareModal }) {
             onClick={() => !loading && setShowShareModal(false)}
           >
             <motion.div
-              className="bg-white w-[90%] max-w-md p-6 rounded-2xl shadow-2xl relative text-center"
+              className="bg-white w-[90%] max-w-xl p-6 rounded-2xl shadow-2xl relative text-center"
               initial={{ scale: 0.9, opacity: 0, y: 30 }}
               animate={{ scale: 1, opacity: 1, y: 0 }}
               exit={{ scale: 0.9, opacity: 0, y: 30 }}
@@ -75,7 +80,7 @@ function ShareModal({ showShareModal, setShowShareModal }) {
               {!loading && !shareLink && (
                 <>
                   <h2 className="text-lg font-semibold mb-4">
-                    Do you want to share your posts with the public?
+                    Do you want to your posts to me made public?
                   </h2>
                   <div className="flex justify-center gap-6">
                     <button
@@ -98,21 +103,25 @@ function ShareModal({ showShareModal, setShowShareModal }) {
               {loading && (
                 <div className="flex flex-col items-center justify-center py-6">
                   <div className="w-10 h-10 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mb-3"></div>
-                  <p className="text-gray-600 font-medium">Generating link...</p>
+                  <p className="text-gray-600 font-medium">
+                    Generating link...
+                  </p>
                 </div>
               )}
 
               {/* Shareable Link */}
               {!loading && shareLink && (
                 <>
-                <button
-                  onClick={() => setShowShareModal(false)}
-                  className="absolute top-0 right-3 text-gray-500 hover:text-gray-800 text-2xl mb-2"
-                >
-                  &times;
-                </button>
-                  <h2 className="text-lg font-semibold mb-4">Your Shareable Link</h2>
-                  <div className="bg-gray-100 p-3 rounded-lg mb-4 text-sm text-gray-700 break-all">
+                  <button
+                    onClick={() => setShowShareModal(false)}
+                    className="absolute top-0 right-3 text-gray-500 hover:text-gray-800 text-2xl mb-2"
+                  >
+                    &times;
+                  </button>
+                  <h2 className="text-lg font-semibold mb-4">
+                    Your Shareable Link (expires in 1hour)
+                  </h2>
+                  <div className="bg-gray-100 p-3 rounded-lg mb-4 mx-auto w-fit text-sm text-gray-700 break-all">
                     {shareLink}
                   </div>
                   <button
@@ -128,7 +137,7 @@ function ShareModal({ showShareModal, setShowShareModal }) {
         )}
       </AnimatePresence>
     </>
-  )
+  );
 }
 
-export default ShareModal
+export default ShareModal;

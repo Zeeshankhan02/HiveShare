@@ -13,7 +13,7 @@ export function HomeNavbar() {
     <>
       <nav className="flex justify-around items-center h-18 w-full bg-amber-600 ">
         <div className="flex items-center gap-0.5 text-amber-100">
-          <div className="font-licorice font-bold text-3xl">BrainBox</div>
+          <div className="font-licorice font-bold text-3xl">HiveShare</div>
           <div className="text-white"><Logo /></div>
         </div>
         <div className="text-white cursor hover:text-amber-800">

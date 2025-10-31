@@ -1,8 +1,11 @@
-import { motion } from 'framer-motion'
-import Posts from './Posts';
+import { motion } from "framer-motion";
+import Posts from "./Posts";
+import { useEffect } from "react";
 
-
-function PageContent({ data, loader, category, onDelete }) {
+function PageContent({ data, setData, loader, category }) {
+  useEffect(() => {
+    window.twttr?.widgets?.load();
+  }, [data]);
   return (
     <main className="flex-1 p-6 overflow-y-auto">
       {loader ? (
@@ -27,10 +30,10 @@ function PageContent({ data, loader, category, onDelete }) {
                 title={item.title}
                 desc={item.description}
                 link={item.url}
-                platform={item.platform}
+                platform={item.platform.toLowerCase()}
+                setData={setData}
                 fav={item.is_favourite}
                 category={category}
-                onDelete={onDelete}
               />
             </motion.div>
           ))}
@@ -44,13 +47,17 @@ function PageContent({ data, loader, category, onDelete }) {
           />
           <div className="mt-2 text-2xl text-center">
             <p>
-              Nothing to show here {location.href == `${location.origin}/saved/all` || location.href == `${location.origin}/saved/${category}` ? <span>please add something...🥲</span> : null}
+              Nothing to show here{" "}
+              {location.href == `${location.origin}/saved/all` ||
+              location.href == `${location.origin}/saved/${category}` ? (
+                <span>please add something...🥲</span>
+              ) : null}
             </p>
           </div>
         </div>
       )}
     </main>
-  )
+  );
 }
 
-export default PageContent
+export default PageContent;

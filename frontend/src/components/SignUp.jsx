@@ -4,7 +4,7 @@ import axios from "axios"
 
 function SignUp() {
   const [inputValues, setInputValues] = useState({
-    fullName: '', email: '', password: ''
+    name: '', email: '', password: ''
   })
 
   const [loader, setLoader] = useState(false)
@@ -37,7 +37,7 @@ function SignUp() {
 
   const inputs = [
     {
-      name: "fullName",
+      name: "name",
       label: "Full Name",
       type: "text"
     }, {
