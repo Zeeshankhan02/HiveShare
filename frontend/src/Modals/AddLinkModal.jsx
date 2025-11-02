@@ -38,6 +38,7 @@ export default function AddLinkModal({ showModal, setShowModal, onAdd }) {
           },
         }
       );
+      
       if (!res) {
         alert("Failed to Add post");
         setLoader(false);
@@ -52,6 +53,7 @@ export default function AddLinkModal({ showModal, setShowModal, onAdd }) {
         onAdd();
       }
     } catch (error) {
+      toast.error(error.message);
       setLoader(false)
       toast.error(error.data.message);
     }

@@ -6,11 +6,11 @@ import { DashboardNavbar } from "./Navbar";
 import PageContent from "./PageContent";
 
 function Saved() {
-  const [loader, setLoader] = useState(true);
+  const [loader, setLoader] = useState(false);
   const navigate = useNavigate();
   const { category } = useParams();
 
-  const [data, setData] = useState([]);
+  const [data, setData] = useState([ ]);
 
   async function fetchData() {
     const token = localStorage.getItem("SBtoken");
@@ -22,8 +22,12 @@ function Saved() {
       const response = await axios.get(
         `${import.meta.env.VITE_BACKEND_URL}/posts`,
         {
+          withCredentials: true,
           headers: {
             Authorization: `Bearer ${token}`,
+            'Accept': 'application/json',
+            "ngrok-skip-browser-warning": "true",
+            "User-Agent": "Custom-User-Agent"
           },
         }
       );
@@ -49,12 +53,12 @@ function Saved() {
     category === "all"
       ? data
       : category === "favorites"
-      ? data.filter((item) => item.is_favourite === true)
-      : data.filter((item) => item.platform.toLowerCase() === category);
+        ? data.filter((item) => item.is_favourite === true)
+        : data.filter((item) => item.platform.toLowerCase() === category);
 
   return (
     <div className="flex h-screen ">
-      <div className="min-w-72">
+      <div className="hidden md:min-w-6xs md:block lg:min-w-xs lg:block">
         {/* SideBar */}
         <Sidebar />
       </div>

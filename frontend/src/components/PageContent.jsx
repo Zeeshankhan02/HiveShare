@@ -5,9 +5,14 @@ import { useEffect } from "react";
 function PageContent({ data, setData, loader, category }) {
   useEffect(() => {
     window.twttr?.widgets?.load();
-  }, [data]);
+  }, [category]);
+
   return (
-    <main className="flex-1 p-6 overflow-y-auto">
+    <main className="flex-1 sm:py-4 lg:p-6 overflow-y-auto [&::-webkit-scrollbar]:w-1
+  [&::-webkit-scrollbar-track]:bg-gray-100
+  [&::-webkit-scrollbar-thumb]:bg-gray-300
+  dark:[&::-webkit-scrollbar-track]:bg-neutral-700
+  dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500">
       {loader ? (
         <p className="text-xl font-medium animate-bounce [animation-duration:0.5s]">
           <span className="animate-pulse [animation-duration:0.3s]">
@@ -15,7 +20,7 @@ function PageContent({ data, setData, loader, category }) {
           </span>
         </p>
       ) : data.length > 0 ? (
-        <div className="columns-1 sm:columns-2 lg:columns-3 gap-6 space-y-6">
+        <div className="columns-1 sm:columns-2 lg:columns-2 xl:columns-3 space-y-6 gap-2">
           {data.map((item, idx) => (
             <motion.div
               initial={{ opacity: 0, y: 40 }}
@@ -23,7 +28,7 @@ function PageContent({ data, setData, loader, category }) {
               exit={{ opacity: 0, y: 0 }}
               transition={{ delay: idx * 0.04 }}
               viewport={{ once: true }}
-              key={idx}
+              key={item.post_id}
             >
               <Posts
                 post_id={item.post_id}

@@ -29,31 +29,34 @@ export function DashboardNavbar({ category,onAdd }) {
   const [showShareModal, setShowShareModal] = useState(false);
   return (
     <>
-      <header className="flex items-center justify-between px-6 py-3 shadow-sm bg-gray-100 border-b border-gray-300">
-        <h1 className="text-2xl font-semibold font-macondo tracking-wide">
+      <header className="flex flex-col sm:flex-row items-center justify-between px-4 sm:px-6 py-3 sm:py-4 bg-gray-100 border-b border-gray-300 shadow-sm gap-3 sm:gap-0">
+        {/* Category Title */}
+        <h1 className="text-xl sm:text-2xl font-semibold font-macondo tracking-wide text-gray-800">
           {category.toUpperCase()}
         </h1>
 
-        <div className="flex gap-4">
+        {/* Buttons */}
+        <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 w-full sm:w-auto">
           <button
-            // onClick={() => modal.setShowModal(true)}
             onClick={() => setShowModal(true)}
-            className="flex items-center justify-center gap-2 px-6 py-2 text-lg font-medium text-white bg-black rounded-lg transition-all hover:bg-zinc-700 hover:scale-105 active:scale-100"
+            className="flex items-center justify-center gap-2 px-4 sm:px-6 py-2 text-base sm:text-lg font-medium text-white bg-black rounded-lg transition-all hover:bg-zinc-700 hover:scale-105 active:scale-100 w-full sm:w-auto"
           >
-            Add Content <PlusIcon />
+            Add Content <PlusIcon className="w-5 h-5" />
           </button>
 
           <button
-            // onClick={() => modal.setShowShareModal(true)}
             onClick={() => setShowShareModal(true)}
-            className="flex items-center justify-center gap-2 px-6 py-2 text-lg font-medium text-white bg-blue-600 rounded-lg transition-all hover:bg-blue-700 hover:scale-105 active:scale-100"
+            className="flex items-center justify-center gap-2 px-4 sm:px-6 py-2 text-base sm:text-lg font-medium text-white bg-blue-600 rounded-lg transition-all hover:bg-blue-700 hover:scale-105 active:scale-100 w-full sm:w-auto"
           >
-            Share <ShareIcon />
+            Share <ShareIcon className="w-5 h-5" />
           </button>
         </div>
       </header>
-      <AddLinkModal showModal={showModal} setShowModal={setShowModal} onAdd={onAdd}/>
+
+      {/* Modals */}
+      <AddLinkModal showModal={showModal} setShowModal={setShowModal} onAdd={onAdd} />
       <ShareModal showShareModal={showShareModal} setShowShareModal={setShowShareModal} />
     </>
-  )
+  );
+
 }

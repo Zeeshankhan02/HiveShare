@@ -52,7 +52,7 @@ function Posts({
   };
 
   return (
-    <div className="break-inside-avoid p-4 bg-white rounded-xl shadow-md border border-gray-200">
+    <div className="break-inside-avoid p-4 bg-white rounded-xl shadow-md border border-gray-200  mx-auto md:mx-2 h-fit max-w-[86rem] ">
       {/* Header */}
       <div className="flex justify-between items-center mb-3">
         <div className="flex items-center gap-2">
@@ -96,9 +96,10 @@ function Posts({
         )}
 
         {platform === "twitter" && (
-          <div className="w-full">
-            <blockquote className="twitter-tweet">
+          <div className="w-full overflow-hidden ">
+            <blockquote className="twitter-tweet ">
               <a
+              width='100%'
                 href={`${link.replace(
                   "/x.com/",
                   "/twitter.com/"

@@ -2,6 +2,7 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 function ShareModal({ showShareModal, setShowShareModal }) {
   const [loading, setLoading] = useState(false);
@@ -36,7 +37,7 @@ function ShareModal({ showShareModal, setShowShareModal }) {
           );
         }
       } catch (err) {
-        alert("Internel Server Error");
+        toast.error("Internel Server Error");
       } finally {
         setLoading(false);
       }
