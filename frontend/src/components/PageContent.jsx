@@ -5,7 +5,7 @@ import { useEffect } from "react";
 function PageContent({ data, setData, loader, category }) {
   useEffect(() => {
     window.twttr?.widgets?.load();
-  }, [category]);
+  }, [category,data]);
 
   return (
     <main className="flex-1 sm:py-4 lg:p-6 overflow-y-auto [&::-webkit-scrollbar]:w-1

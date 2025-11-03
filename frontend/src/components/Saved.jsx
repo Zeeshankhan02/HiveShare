@@ -27,10 +27,11 @@ function Saved() {
             Authorization: `Bearer ${token}`,
             'Accept': 'application/json',
             "ngrok-skip-browser-warning": "true",
-            "User-Agent": "Custom-User-Agent"
           },
         }
       );
+      console.log(response);
+      
       if (!response) {
         alert("failed to Fetch data");
       } else {

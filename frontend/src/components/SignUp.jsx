@@ -24,6 +24,8 @@ function SignUp() {
         headers: { "Content-Type": "application/json" },
       }
       )
+      console.log(res);
+      
       if (!res) {
         alert('Login failed please try again')
       } else {

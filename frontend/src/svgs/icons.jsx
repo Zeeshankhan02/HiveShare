@@ -1,5 +1,6 @@
 import axios from "axios"
 import { useState } from "react"
+import toast from "react-hot-toast"
 
 export function Bookmarks() {
   return <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-8 text-cyan-400">
@@ -83,21 +84,26 @@ export function CrossIcon() {
 
 }
 
-export function DeleteIcon({ post_id, onDelete }) {
+export function DeleteIcon({ post_id, setData }) {
 
   const [loader, setLoader] = useState(true)
 
   async function deletePost() {
     setLoader(false)
     try {
-      const del = await axios.delete(`${import.meta.env.VITE_BACKEND_URL}/posts/${post_id}`)
+      const token = localStorage.getItem('SBtoken')
+      const del = await axios.delete(`${import.meta.env.VITE_BACKEND_URL}/posts/${post_id}`,{
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
 
       if (!del) {
-        alert('failed to delete post')
+        toast.error('failed to delete post')
       }
       else {
-        alert('post deleted sucessfully')
-        onDelete()
+        toast.success('post deleted sucessfully')
+        setData(prev => prev.filter(item => item.post_id!== post_id))
       }
     } catch (error) {
       setLoader(true)
