@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom"
 import { Logo } from "../svgs/Logo"
 import {
+  Menu,
   PlusIcon,
   ShareIcon,
 } from "../svgs/icons";
@@ -24,16 +25,18 @@ export function HomeNavbar() {
   )
 }
 
-export function DashboardNavbar({ category,onAdd }) {
+export function DashboardNavbar({ category,onAdd, setMenuOpen }) {
   const [showModal, setShowModal] = useState(false);
   const [showShareModal, setShowShareModal] = useState(false);
+  
   return (
     <>
       <header className="flex flex-col sm:flex-row items-center justify-between px-4 sm:px-6 py-3 sm:py-4 bg-gray-100 border-b border-gray-300 shadow-sm gap-3 sm:gap-0">
         {/* Category Title */}
-        <h1 className="text-xl sm:text-2xl font-semibold font-macondo tracking-wide text-gray-800">
+        <h1 className="hidden lg:block text-xl sm:text-2xl font-semibold font-macondo tracking-wide text-gray-800">
           {category.toUpperCase()}
         </h1>
+        <div className="hidden sm:block lg:hidden"><Menu setMenuOpen={setMenuOpen}/></div>
 
         {/* Buttons */}
         <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 w-full sm:w-auto">

@@ -23,7 +23,7 @@ function App() {
         <Route path="saved" element={<Navigate to="/saved/all" replace />} />
         <Route path="*" element={<RandomRoute />} />
       </Routes>
-      <Toaster position="top-right" reverseOrder={false} />
+      <Toaster position="bottom-right" reverseOrder={false} />
     </BrowserRouter>
   );
 }

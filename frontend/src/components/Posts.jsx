@@ -14,6 +14,7 @@ import {
 } from "../svgs/icons.jsx";
 import axios from "axios";
 import toast from "react-hot-toast";
+import { useState } from "react";
 
 function Posts({
   post_id,
@@ -27,9 +28,11 @@ function Posts({
 }) {
   const videoId = platform === "youtube" ? extractYoutubeId(link) : null;
   const iframeSrc = platform === "linkedin" ? extractIframeSrc(link) : null;
+  const [loader, setLoader] = useState(false)
 
   const toggleFavourite = async () => {
     try {
+      setLoader(true)
       const token = localStorage.getItem("SBtoken");
       const res = await axios.patch(
         `${import.meta.env.VITE_BACKEND_URL}/posts/${post_id}/favourite`,
@@ -44,6 +47,7 @@ function Posts({
           p.post_id === post_id ? { ...p, is_favourite: updatedFav } : p
         )
       );
+      setLoader(prev => !prev)
       toast.success(res.data.message);
     } catch (error) {
       toast.error(error.data.message);
@@ -58,20 +62,28 @@ function Posts({
         <div className="flex items-center gap-2">
           {platform === "youtube" && <Youtube />}
           {platform === "twitter" && <Twitter />}
+          {platform === "facebook" && <Facebook />}
           {platform === "instagram" && <Instagram />}
           {platform === "linkedin" && <LinkedIn />}
           <span className="font-bold">{title}</span>
         </div>
 
         {(location.pathname.includes("/saved") || category) && (
-          <div className="flex gap-3">
-            <div onClick={toggleFavourite}>
+          <div className="flex gap-3 items-center">
+            {!loader?<div onClick={toggleFavourite}>
               {fav ? (
                 <IsFavorite className="fill-red-600" />
               ) : (
                 <IsNotFavorite />
               )}
-            </div>
+            </div>:<div
+        className="inline-block h-4 w-4 animate-spin rounded-full border-2 border-solid border-current border-e-transparent align-[-0.125em] text-surface motion-reduce:animate-[spin_1.5s_linear_infinite] "
+        role="status">
+        <span
+          className="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]"
+        >Loading...</span
+        >
+      </div>}
             <div>
               <DeleteIcon post_id={post_id} setData={setData} />
             </div>
@@ -99,7 +111,7 @@ function Posts({
           <div className="w-full overflow-hidden ">
             <blockquote className="twitter-tweet ">
               <a
-              width='100%'
+                width='100%'
                 href={`${link.replace(
                   "/x.com/",
                   "/twitter.com/"

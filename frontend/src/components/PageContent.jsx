@@ -2,13 +2,13 @@ import { motion } from "framer-motion";
 import Posts from "./Posts";
 import { useEffect } from "react";
 
-function PageContent({ data, setData, loader, category }) {
+function PageContent({ data, setData, loader, category, menuOpen }) {
   useEffect(() => {
     window.twttr?.widgets?.load();
   }, [category,data]);
 
   return (
-    <main className="flex-1 sm:py-4 lg:p-6 overflow-y-auto [&::-webkit-scrollbar]:w-1
+    <main className="flex-1 p-4 lg:p-6 overflow-y-auto [&::-webkit-scrollbar]:w-1
   [&::-webkit-scrollbar-track]:bg-gray-100
   [&::-webkit-scrollbar-thumb]:bg-gray-300
   dark:[&::-webkit-scrollbar-track]:bg-neutral-700
@@ -20,7 +20,7 @@ function PageContent({ data, setData, loader, category }) {
           </span>
         </p>
       ) : data.length > 0 ? (
-        <div className="columns-1 sm:columns-2 lg:columns-2 xl:columns-3 space-y-6 gap-2">
+        <div className={`columns-1 sm:${menuOpen?"columns-1":"columns-2"} lg:columns-2 xl:columns-3 space-y-6 gap-2`}>
           {data.map((item, idx) => (
             <motion.div
               initial={{ opacity: 0, y: 40 }}

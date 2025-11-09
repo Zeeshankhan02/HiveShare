@@ -77,7 +77,7 @@ function SignUp() {
                     />
                   </label>
                 ))}
-                <div className="text-sky-600  hover:text-sky-900">
+                <div className="text-sky-600  hover:text-sky-900" disabled={loader ? true : false}>
                   <Link to="/login">Already have an acc?</Link>
                 </div>
                 <button type="submit" className="bg-sky-600  py-2 rounded-lg w-40 lg:w-60 text-lg font-semibold text-white cursor-pointer hover:bg-sky-500 hover:scale-102 self-center transition-all" disabled={loader ? true : false}> {!loader ? <p>Sign Up</p> : <p className="animate-pulse [animation-duration:0.6s]">Signing Up...</p>}</button>

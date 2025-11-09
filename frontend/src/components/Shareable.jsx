@@ -3,6 +3,7 @@ import { HomeNavbar } from './Navbar'
 import PageContent from './PageContent'
 import { useParams } from 'react-router-dom'
 import axios from 'axios'
+import toast from 'react-hot-toast'
 
 function Shareable() {
  const [loader, setLoader] = useState(true)
@@ -11,12 +12,20 @@ function Shareable() {
 
   async function fetchData() {
     try {
-      const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/shared-link/${shared_id}`)
+      const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/shared-link/${shared_id}`,{
+        withCredentials: true,
+        headers: {
+          'Accept': 'application/json',
+          "ngrok-skip-browser-warning": "true",
+        },
+      })
       if (!response) {
-        alert("failed to Fetch data")
+        toast.error("failed to Fetch data")
       } else {
         setLoader(false)
         setData(response.data.posts)
+        console.log(response);
+        
       }
 
     } catch (error) {

@@ -1,6 +1,7 @@
 import axios from "axios";
 import { Logo } from "../svgs/Logo";
 import {
+  Facebook,
   Globe,
   Instagram,
   IsFavorite,
@@ -12,7 +13,7 @@ import {
 import { NavLink, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 
-function Sidebar() {
+function Sidebar({setMenuOpen}) {
   const sidebarItems = [
     {
       text: "All",
@@ -55,6 +56,7 @@ function Sidebar() {
             <NavLink
               to={`/saved/${item.text.toLowerCase()}`}
               key={idx}
+              onClick={()=>setMenuOpen(false)}
               className={({ isActive }) =>
                 `flex items-center gap-2 p-1 border-b-2 border-amber-300 hover:bg-gray-400 hover:rounded-md cursor-pointer transition-colors ${
                   isActive ? "bg-gray-200 rounded-md" : ""
@@ -74,6 +76,7 @@ function Sidebar() {
               e.preventDefault(); // prevent immediate navigation
               try {
                 const token = localStorage.getItem("SBtoken");
+                const toastID=toast.loading("Logging Out")
                 const res = await axios.post(
                   `${import.meta.env.VITE_BACKEND_URL}/logout`,
                   {}, // request body (empty)
@@ -88,7 +91,7 @@ function Sidebar() {
                 // Navigate manually after success
                 if (res.status === 200) {
                   navigate("/login");
-                  toast.success(res.data.message);
+                  toast.success(res.data.message,{id:toastID});
                 }
               } catch (error) {
                 alert("Error logging out. Please try again.");

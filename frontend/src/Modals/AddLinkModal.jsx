@@ -2,6 +2,7 @@ import { useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import axios from "axios";
 import toast from "react-hot-toast";
+import { useNavigate, useParams } from "react-router-dom";
 
 export default function AddLinkModal({ showModal, setShowModal, onAdd }) {
   const [loader, setLoader] = useState(false);
@@ -9,10 +10,13 @@ export default function AddLinkModal({ showModal, setShowModal, onAdd }) {
   const titleRef = useRef();
   const descRef = useRef();
   const linkRef = useRef();
+  const {category} = useParams()
+  const navigate = useNavigate()
 
   const tags = [
     { name: "Instagram", color: "bg-pink-500" },
     { name: "Twitter", color: "bg-neutral-900" },
+    // { name: "Facebook", color: "bg-blue-900" },
     { name: "LinkedIn", color: "bg-sky-700" },
     { name: "Youtube", color: "bg-red-600" },
   ];
@@ -24,40 +28,73 @@ export default function AddLinkModal({ showModal, setShowModal, onAdd }) {
     platform: selectedTag,
   };
 
+
   const handleSubmit = async (e) => {
-    const token = localStorage.getItem("SBtoken");
     e.preventDefault();
+    const token = localStorage.getItem("SBtoken");
+  
+    // Get current input values
+    const link = linkRef.current?.value?.trim();
+    const title = titleRef.current?.value?.trim();
+    const desc = descRef.current?.value?.trim();
+  
+    // Basic field validation
+    if (!link || !title || !desc || !selectedTag) {
+      toast.error("Please fill all fields and select a category.");
+      return;
+    }
+  
+    // Platform-specific URL validation
+    const platformValidators = {
+      Instagram: /(?:instagram\.com)/i,
+      Twitter: /(?:twitter\.com|x\.com)/i,
+      Facebook: /(?:facebook\.com)/i,
+      LinkedIn: /(?:linkedin\.com)/i,
+      Youtube: /(?:youtube\.com|youtu\.be)/i,
+    };
+  
+    const regex = platformValidators[selectedTag];
+    if (!regex?.test(link)) {
+      toast.error(`That link doesn’t look like a valid ${selectedTag} URL.`);
+      return;
+    }
+  
+    // Prepare payload
+    const data = {
+      title,
+      description: desc,
+      url: link,
+      platform: selectedTag,
+    };
+  
     setLoader(true);
+  
     try {
       const res = await axios.post(
         `${import.meta.env.VITE_BACKEND_URL}/posts`,
         data,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
+        { headers: { Authorization: `Bearer ${token}` } }
       );
-      
-      if (!res) {
-        alert("Failed to Add post");
-        setLoader(false);
-      } else {
-        setLoader(false);
-        setShowModal(false);
-        toast.success(res.data.message);
-        titleRef.current.value = "";
-        descRef.current.value = "";
-        linkRef.current.value = "";
-        setSelectedTag(null);
-        onAdd();
+  
+      setLoader(false);
+      setShowModal(false);
+  
+      if (category !== selectedTag.toLowerCase()) {
+        navigate("/saved/all");
       }
+  
+      toast.success(res.data.message);
+      titleRef.current.value = "";
+      descRef.current.value = "";
+      linkRef.current.value = "";
+      setSelectedTag(null);
+      onAdd();
     } catch (error) {
-      toast.error(error.message);
-      setLoader(false)
-      toast.error(error.data.message);
+      setLoader(false);
+      toast.error(error.response?.data?.message || error.message);
     }
   };
+  
 
   return (
     <>

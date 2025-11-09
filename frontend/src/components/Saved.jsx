@@ -4,18 +4,21 @@ import axios from "axios";
 import Sidebar from "./Sidebar";
 import { DashboardNavbar } from "./Navbar";
 import PageContent from "./PageContent";
+import toast from "react-hot-toast";
+import { motion } from 'framer-motion'
 
 function Saved() {
-  const [loader, setLoader] = useState(false);
+  const [loader, setLoader] = useState(true);
   const navigate = useNavigate();
   const { category } = useParams();
+  const [menuOpen,setMenuOpen] = useState(false)
 
-  const [data, setData] = useState([ ]);
+  const [data, setData] = useState([]);
 
   async function fetchData() {
     const token = localStorage.getItem("SBtoken");
     if (!token) {
-      alert("please login first");
+      toast.error("please login first");
       navigate("/login");
     }
     try {
@@ -30,8 +33,8 @@ function Saved() {
           },
         }
       );
-      console.log(response);
-      
+
+
       if (!response) {
         alert("failed to Fetch data");
       } else {
@@ -59,15 +62,21 @@ function Saved() {
 
   return (
     <div className="flex h-screen ">
-      <div className="hidden md:min-w-6xs md:block lg:min-w-xs lg:block">
-        {/* SideBar */}
-        <Sidebar />
-      </div>
+      <motion.div
+        initial={{ opacity: 0, x: -30 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.4, ease: "easeOut" }}
+        className={`${menuOpen?"block w-2xs":"hidden" }  lg:min-w-xs lg:block`}>
+        <Sidebar setMenuOpen={setMenuOpen}/>
+      </motion.div>
 
       {/* Main Area */}
-      <div className="main flex flex-col flex-1 bg-gray-50 overflow-hidden">
+      <motion.div
+        initial={{ opacity: 0, y: -30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4, ease: "easeOut" }} className="main flex flex-col flex-1 bg-gray-50 overflow-hidden">
         {/* Navbar */}
-        <DashboardNavbar category={category} onAdd={fetchData} />
+        <DashboardNavbar category={category} onAdd={fetchData} setMenuOpen={setMenuOpen} />
 
         {/* Page Content */}
         <PageContent
@@ -75,8 +84,9 @@ function Saved() {
           setData={setData}
           loader={loader}
           category={category}
+          menuOpen={menuOpen}
         />
-      </div>
+      </motion.div>
     </div>
   );
 }
