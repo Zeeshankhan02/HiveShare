@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom"
+import { Link, NavLink } from "react-router-dom"
 import { Logo } from "../svgs/Logo"
 import {
   Menu,
@@ -17,15 +17,17 @@ export function HomeNavbar() {
           <div className="font-licorice font-bold text-3xl">HiveShare</div>
           <div className="text-white"><Logo /></div>
         </div>
-        <div className="text-white cursor hover:text-amber-800">
-          <Link className="py-4 px-2 text-lg font-semibold block" to={'/login'}>LOGIN</Link>
+        <div className="text-white cursor flex items-center gap-6">
+          <NavLink className={({isActive})=>`${isActive?"bg-amber-400 hidden sm:block text-black py-4 px-2 text-lg  font-semibold rounded-xl hover:bg-amber-200":"py-4 px-2 text-lg font-semibold block hover:text-black hover:bg-amber-400 transition-all rounded-xl ease-in-out"} `} to={'/'}>Home</NavLink>
+          <NavLink className={({isActive})=>`${isActive?"bg-amber-400 text-black py-4 px-2 text-lg  font-semibold rounded-xl hover:bg-amber-200":"py-4 px-2 text-lg font-semibold block hover:text-black hover:bg-amber-400 transition-all rounded-xl ease-in-out"} `} to={'/sign-up'}>SignUp</NavLink>
+          <NavLink className={({isActive})=>`${isActive?"bg-amber-400 text-black py-4 px-2 text-lg  font-semibold rounded-xl hover:bg-amber-200":"py-4 px-2 text-lg font-semibold block hover:text-black hover:bg-amber-400 transition-all rounded-xl ease-in-out"} `} to={'/login'}>LogIn</NavLink>
         </div>
       </nav>
     </>
   )
 }
 
-export function DashboardNavbar({ category,onAdd, setMenuOpen }) {
+export function DashboardNavbar({ category,onAdd, menuOpen, setMenuOpen }) {
   const [showModal, setShowModal] = useState(false);
   const [showShareModal, setShowShareModal] = useState(false);
   
@@ -36,13 +38,13 @@ export function DashboardNavbar({ category,onAdd, setMenuOpen }) {
         <h1 className="hidden lg:block text-xl sm:text-2xl font-semibold font-macondo tracking-wide text-gray-800">
           {category.toUpperCase()}
         </h1>
-        <div className="hidden sm:block lg:hidden"><Menu setMenuOpen={setMenuOpen}/></div>
+        {!menuOpen && <div onClick={()=>setMenuOpen(menu=>!menu)} className="hidden sm:block lg:hidden cursor-pointer"><Menu/></div>}
 
         {/* Buttons */}
         <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 w-full sm:w-auto">
           <button
             onClick={() => setShowModal(true)}
-            className="flex items-center justify-center gap-2 px-4 sm:px-6 py-2 text-base sm:text-lg font-medium text-white bg-black rounded-lg transition-all hover:bg-zinc-700 hover:scale-105 active:scale-100 w-full sm:w-auto"
+            className={`flex items-center justify-center gap-2 px-4 sm:px-6 py-2 text-base sm:text-lg font-medium text-white bg-black rounded-lg transition-all hover:bg-zinc-700 hover:scale-105 active:scale-100 w-full sm:w-auto`}
           >
             Add Content <PlusIcon className="w-5 h-5" />
           </button>

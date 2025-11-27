@@ -1,6 +1,7 @@
 import axios from "axios";
 import { Logo } from "../svgs/Logo";
 import {
+  CrossIcon,
   Facebook,
   Globe,
   Instagram,
@@ -13,7 +14,7 @@ import {
 import { NavLink, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 
-function Sidebar({setMenuOpen}) {
+function Sidebar({ menuOpen, setMenuOpen }) {
   const sidebarItems = [
     {
       text: "All",
@@ -45,21 +46,26 @@ function Sidebar({setMenuOpen}) {
   return (
     <>
       {/* Sidebar */}
-      <div className=" min-h-full bg-amber-400 p-6">
-        <a href="/" className="inline-flex items-center">
-          <div className="font-licorice font-black text-2xl">HiveShare</div>
-          <Logo />
-        </a>
+      <div className=" min-h-full bg-amber-400 p-6 ">
+        <div className="flex items-center justify-between">
+          <a href="/" className="inline-flex items-center">
+            <div className="font-licorice font-black text-2xl">HiveShare</div>
+            <Logo />
+          </a>
+          {menuOpen && <div className="cursor-pointer rounded-2xl bg-amber-300 hover:bg-amber-200 hover:scale-120 transition-all ease-in-out" onClick={() => setMenuOpen(op => !op)}><CrossIcon /></div>}
+        </div>
 
         <div className="flex flex-col gap-1 justify-center mt-12">
           {sidebarItems.map((item, idx) => (
             <NavLink
               to={`/saved/${item.text.toLowerCase()}`}
               key={idx}
-              onClick={()=>setMenuOpen(false)}
+              onClick={() => {
+                setMenuOpen(false)
+                window.scrollTo({ top: 0, behavior: "smooth" });
+              }}
               className={({ isActive }) =>
-                `flex items-center gap-2 p-1 border-b-2 border-amber-300 hover:bg-gray-400 hover:rounded-md cursor-pointer transition-colors ${
-                  isActive ? "bg-gray-200 rounded-md" : ""
+                `flex items-center gap-2 p-1 border-b-2 border-amber-300 hover:bg-gray-400 hover:rounded-md cursor-pointer transition-colors ${isActive ? "bg-gray-200 rounded-md" : ""
                 }`
               }
             >
@@ -76,7 +82,7 @@ function Sidebar({setMenuOpen}) {
               e.preventDefault(); // prevent immediate navigation
               try {
                 const token = localStorage.getItem("SBtoken");
-                const toastID=toast.loading("Logging Out")
+                const toastID = toast.loading("Logging Out")
                 const res = await axios.post(
                   `${import.meta.env.VITE_BACKEND_URL}/logout`,
                   {}, // request body (empty)
@@ -91,7 +97,7 @@ function Sidebar({setMenuOpen}) {
                 // Navigate manually after success
                 if (res.status === 200) {
                   navigate("/login");
-                  toast.success(res.data.message,{id:toastID});
+                  toast.success(res.data.message, { id: toastID });
                 }
               } catch (error) {
                 alert("Error logging out. Please try again.");

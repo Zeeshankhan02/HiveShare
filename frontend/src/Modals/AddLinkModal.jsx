@@ -90,8 +90,12 @@ export default function AddLinkModal({ showModal, setShowModal, onAdd }) {
       setSelectedTag(null);
       onAdd();
     } catch (error) {
+      if (error.response.status === 401) {
+        
+        toast.error("Session Expired please login again"|| error.message);
+        navigate('/login')
+      }
       setLoader(false);
-      toast.error(error.response?.data?.message || error.message);
     }
   };
   

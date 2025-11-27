@@ -14,7 +14,7 @@ import {
 } from "../svgs/icons.jsx";
 import axios from "axios";
 import toast from "react-hot-toast";
-import { useState } from "react";
+import React, { useState } from "react";
 
 function Posts({
   post_id,
@@ -109,9 +109,8 @@ function Posts({
 
         {platform === "twitter" && (
           <div className="w-full overflow-hidden ">
-            <blockquote className="twitter-tweet ">
+            <blockquote className="twitter-tweet w-[100%] ">
               <a
-                width='100%'
                 href={`${link.replace(
                   "/x.com/",
                   "/twitter.com/"
@@ -147,4 +146,4 @@ function Posts({
     </div>
   );
 }
-export default Posts;
+export default React.memo(Posts);

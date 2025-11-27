@@ -39,16 +39,12 @@ function Login() {
         {
           headers: { "Content-Type": "application/json" },
         }
-      );
-      if (!res) {
-        alert("Login failed please try again");
-      } else {
+      );    
         localStorage.setItem("SBtoken", res.data.token);
         navigate("/saved");
-      }
     } catch (error) {
-      alert(error.response.data.message);
-      setLoader((prev) => !prev);
+      alert("Login failed please try again");
+      setLoader(false);
     }
   }
 

@@ -10,7 +10,7 @@ import { motion } from 'framer-motion'
 function Saved() {
   const [loader, setLoader] = useState(true);
   const navigate = useNavigate();
-  const { category } = useParams();
+  const { category="all" } = useParams();
   const [menuOpen,setMenuOpen] = useState(false)
 
   const [data, setData] = useState([]);
@@ -51,7 +51,7 @@ function Saved() {
   }
   useEffect(() => {
     fetchData();
-  }, [category]);
+  }, []);
 
   const filteredData =
     category === "all"
@@ -66,8 +66,8 @@ function Saved() {
         initial={{ opacity: 0, x: -30 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.4, ease: "easeOut" }}
-        className={`${menuOpen?"block w-2xs":"hidden" }  lg:min-w-xs lg:block`}>
-        <Sidebar setMenuOpen={setMenuOpen}/>
+        className={`${menuOpen?"block w-2xs":"hidden" }  lg:min-w-xs lg:block `}>
+        <Sidebar setMenuOpen={setMenuOpen} menuOpen={menuOpen}/>
       </motion.div>
 
       {/* Main Area */}
@@ -76,7 +76,7 @@ function Saved() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4, ease: "easeOut" }} className="main flex flex-col flex-1 bg-gray-50 overflow-hidden">
         {/* Navbar */}
-        <DashboardNavbar category={category} onAdd={fetchData} setMenuOpen={setMenuOpen} />
+        <DashboardNavbar category={category} onAdd={fetchData} setMenuOpen={setMenuOpen} menuOpen={menuOpen}/>
 
         {/* Page Content */}
         <PageContent
