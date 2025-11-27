@@ -1,4 +1,4 @@
-import { Link, NavLink } from "react-router-dom"
+import { Link, NavLink, useParams } from "react-router-dom"
 import { Logo } from "../svgs/Logo"
 import {
   Menu,
@@ -10,6 +10,7 @@ import ShareModal from "../Modals/ShareModal";
 import { useState } from "react";
 
 export function HomeNavbar() {
+  const location = window.origin
   return (
     <>
       <nav className="flex justify-around items-center h-18 w-full bg-amber-600 ">
@@ -18,8 +19,10 @@ export function HomeNavbar() {
           <div className="text-white"><Logo /></div>
         </div>
         <div className="text-white cursor flex items-center gap-6">
+          {!location && <div>
           <NavLink className={({isActive})=>`${isActive?"bg-amber-400 hidden sm:block text-black py-4 px-2 text-lg  font-semibold rounded-xl hover:bg-amber-200":"py-4 px-2 text-lg font-semibold block hover:text-black hover:bg-amber-400 transition-all rounded-xl ease-in-out"} `} to={'/'}>Home</NavLink>
           <NavLink className={({isActive})=>`${isActive?"bg-amber-400 text-black py-4 px-2 text-lg  font-semibold rounded-xl hover:bg-amber-200":"py-4 px-2 text-lg font-semibold block hover:text-black hover:bg-amber-400 transition-all rounded-xl ease-in-out"} `} to={'/sign-up'}>SignUp</NavLink>
+          </div>}
           <NavLink className={({isActive})=>`${isActive?"bg-amber-400 text-black py-4 px-2 text-lg  font-semibold rounded-xl hover:bg-amber-200":"py-4 px-2 text-lg font-semibold block hover:text-black hover:bg-amber-400 transition-all rounded-xl ease-in-out"} `} to={'/login'}>LogIn</NavLink>
         </div>
       </nav>
