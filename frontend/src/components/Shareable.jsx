@@ -16,7 +16,6 @@ function Shareable() {
         withCredentials: true,
         headers: {
           'Accept': 'application/json',
-          "ngrok-skip-browser-warning": "true",
         },
       })
       if (!response) {
