@@ -30,7 +30,8 @@ function PageContent({ data, setData, loader, category, menuOpen }) {
           </span>
         </p>
       ) : data.length > 0 ? (
-        <div className={`columns-1 sm:${menuOpen?"columns-1":"columns-2"} lg:columns-2 xl:columns-3 space-y-6 gap-2`}>
+        <div className={`columns-1 sm:${menuOpen?"columns-1":"columns-2"}
+        md:${!menuOpen?"columns-2":"columns-1"} lg:columns-2 xl:columns-3 space-y-6 gap-2`}>
           {data.map((item, idx) => (
             <motion.div
               key={item.post_id}

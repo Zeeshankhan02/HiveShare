@@ -65,7 +65,7 @@ function Saved() {
         initial={{ opacity: 0, x: -30 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.4, ease: "easeOut" }}
-        className={`${menuOpen?"block w-2xs":"hidden" }  lg:min-w-xs lg:block `}>
+        className={`${menuOpen?"block w-2xs absolute h-screen":"hidden" }  lg:min-w-xs lg:block `}>
         <Sidebar setMenuOpen={setMenuOpen} menuOpen={menuOpen}/>
       </motion.div>
 

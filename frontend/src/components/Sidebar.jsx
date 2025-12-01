@@ -52,7 +52,7 @@ function Sidebar({ menuOpen, setMenuOpen }) {
             <div className="font-licorice font-black text-2xl">HiveShare</div>
             <Logo />
           </a>
-          {menuOpen && <div className="cursor-pointer rounded-2xl bg-amber-300 hover:bg-amber-200 hover:scale-120 transition-all ease-in-out" onClick={() => setMenuOpen(op => !op)}><CrossIcon /></div>}
+          {menuOpen && <div className="cursor-pointer rounded-2xl border border-amber-50 bg-amber-300 hover:bg-amber-200 hover:border-black hover:scale-120 transition-all ease-in-out" onClick={() => setMenuOpen(op => !op)}><CrossIcon /></div>}
         </div>
 
         <div className="flex flex-col gap-1 justify-center mt-12">
@@ -75,7 +75,7 @@ function Sidebar({ menuOpen, setMenuOpen }) {
           ))}
         </div>
 
-        <div className="flex flex-col gap-1 justify-center mt-12 absolute bottom-4">
+        <div className="flex flex-col gap-1 justify-center mt-12 w-fit  border border-amber-50 rounded-lg bg-amber-300">
           <NavLink
             to="/login"
             onClick={async (e) => {
@@ -103,10 +103,10 @@ function Sidebar({ menuOpen, setMenuOpen }) {
                 alert("Error logging out. Please try again.");
               }
             }}
-            className="flex items-center gap-1 p-1 border-amber-300 hover:bg-gray-400 hover:rounded-md cursor-pointer transition-colors"
+            className="flex items-center gap-1 px-2 py-1 hover:bg-gray-400 hover:rounded-md hover:text-white cursor-pointer transition-colors"
           >
             <LogOut className="w-10 h-10" />
-            <h3 className="text-lg">LogOut</h3>
+            <h3 className="text-lg font-semibold">LogOut</h3>
           </NavLink>
         </div>
       </div>
