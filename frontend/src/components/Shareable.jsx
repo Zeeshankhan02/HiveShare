@@ -18,6 +18,8 @@ function Shareable() {
           'Accept': 'application/json',
         },
       })
+      console.log(response);
+      
       if (!response) {
         toast.error("failed to Fetch data")
       } else {
