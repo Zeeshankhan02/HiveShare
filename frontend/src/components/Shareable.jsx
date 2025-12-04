@@ -30,6 +30,7 @@ function Shareable() {
       }
 
     } catch (error) {
+      console.log(error);
       setLoader(false)
     }
   }  
