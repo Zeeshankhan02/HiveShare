@@ -30,7 +30,16 @@ function Shareable() {
       }
 
     } catch (error) {
-      toast.error(error.response.data.message);
+
+      if (error.status === 410) {
+        toast.error(error.response.data.message);
+      }
+      else if (error.status === 404){
+        toast.error(error.response.data.message);
+      }
+      else{
+        toast.error("Invalid link");
+      }
       setLoader(false)
     }
   }  
