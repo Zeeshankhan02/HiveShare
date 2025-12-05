@@ -81,7 +81,7 @@ function ShareModal({ showShareModal, setShowShareModal }) {
               {!loading && !shareLink && (
                 <>
                   <h2 className="text-lg font-semibold mb-4">
-                    Do you want to your posts to me made public?
+                    Do you want to your share posts?
                   </h2>
                   <div className="flex justify-center gap-6">
                     <button

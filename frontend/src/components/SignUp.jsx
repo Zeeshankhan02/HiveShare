@@ -74,6 +74,7 @@ function SignUp() {
                       onChange={handleChange}
                       className="border rounded-md px-2 py-1.5 w-80 focus:outline-none focus:ring-1 focus:ring-sky-400 hover:outline-1"
                       autoComplete="off"
+                      required
                     />
                   </label>
                 ))}
