@@ -27,12 +27,13 @@ function SignUp() {
       console.log(res);
       
       if (!res) {
-        alert('Login failed please try again')
+        alert('SignUp failed please try again')
       } else {
         navigate("/login")
       }
     } catch (error) {
-      alert("Internel Server error")
+      alert(error.response.data)
+      
       setLoader(prev => !prev)
     }
   }
