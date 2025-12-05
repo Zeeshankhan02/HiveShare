@@ -1,42 +1,50 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom"
-import axios from "axios"
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
 
 function SignUp() {
   const [inputValues, setInputValues] = useState({
-    name: '', email: '', password: ''
-  })
+    name: "",
+    email: "",
+    password: "",
+  });
 
-  const [loader, setLoader] = useState(false)
-  const navigate = useNavigate()
+  const [loader, setLoader] = useState(false);
+  const navigate = useNavigate();
+  const [showPassword, setShowPassword] = useState(false);
+  const [errors, setErrors] = useState({});
 
   function handleChange(e) {
-    const { name, value } = e.target
-    setInputValues(prev => ({ ...prev, [name]: value }))
+    const { name, value } = e.target;
+    setInputValues((prev) => ({ ...prev, [name]: value }));
   }
 
   async function handleSignUp(e) {
-    e.preventDefault()
-    setLoader(prev => !prev)
+    e.preventDefault();
+    setLoader((prev) => !prev);
 
     try {
-      const res = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/register`, inputValues, {
-        headers: { "Content-Type": "application/json" },
-      }
-      )
+      const res = await axios.post(
+        `${import.meta.env.VITE_BACKEND_URL}/register`,
+        inputValues,
+        {
+          headers: { "Content-Type": "application/json" },
+        }
+      );
       console.log(res);
-      
+
       if (!res) {
-        alert('SignUp failed please try again')
+        alert("SignUp failed please try again");
       } else {
-        navigate("/login")
+        setErrors({});
+        navigate("/login");
       }
     } catch (error) {
-      console.log(error);
-      
-      alert("Internel Server error")
-      
-      setLoader(prev => !prev)
+      if (error.response && error.response.status === 422) {
+        setErrors(error.response.data.errors); // <-- Set validation errors
+      }
+
+      setLoader((prev) => !prev);
     }
   }
 
@@ -44,56 +52,101 @@ function SignUp() {
     {
       name: "name",
       label: "Full Name",
-      type: "text"
-    }, {
+      type: "text",
+    },
+    {
       name: "email",
       label: "Email",
-      type: "email"
+      type: "email",
     },
     {
       name: "password",
       label: "Password",
-      type: "password"
-    }
-  ]
-  return <>
-    <div className="h-screen w-screen flex justify-center bg-gray-50 items-center absolute -z-10 inset-0
+      type: "password",
+    },
+  ];
+  return (
+    <>
+      <div
+        className="h-screen w-screen flex justify-center bg-gray-50 items-center absolute -z-10 inset-0
       bg-[radial-gradient(circle,#73737350_1px,transparent_1px)] 
-      bg-[size:10px_10px]">
-      <div className="flex justify-center rounded-xl overflow-hidden shadow-xl/20 h-120 lg:h-120 w-90 lg:w-220">
-        <div className="w-[70%] bg-[url(https://img.freepik.com/free-vector/organic-flat-join-us-concept_23-2148948675.jpg?semt=ais_hybrid&w=740&q=80)]  bg-cover bg-center bg-no-repeat hidden lg:block">
-        </div>
-        <div className="w-full lg:w-[50%] flex items-center justify-center inset-shadow-sm/18 bg-gray-100/40 ">
-          <div className="backdrop-blur-none">
-            <form onSubmit={handleSignUp}>
-              <div className="flex flex-col gap-y-4">
-                {inputs.map((input, idx) => (
-                  <label key={idx} className="text-2xs font-medium">
-                    {input.label} <br />
-                    <input
-                      type={input.type}
-                      name={input.name}
-                      value={inputValues[input.name]}
-                      onChange={handleChange}
-                      className="border rounded-md px-2 py-1.5 w-80 focus:outline-none focus:ring-1 focus:ring-sky-400 hover:outline-1"
-                      autoComplete="off"
-                      required
-                    />
-                  </label>
-                ))}
-                <div className="text-sky-600  hover:text-sky-900" disabled={loader ? true : false}>
-                  <Link to="/login">Already have an acc?</Link>
+      bg-[size:10px_10px]"
+      >
+        <div className="flex justify-center rounded-xl overflow-hidden shadow-xl/20 h-120 lg:h-120 w-90 lg:w-220">
+          <div className="w-[70%] bg-[url(https://img.freepik.com/free-vector/organic-flat-join-us-concept_23-2148948675.jpg?semt=ais_hybrid&w=740&q=80)]  bg-cover bg-center bg-no-repeat hidden lg:block"></div>
+          <div className="w-full lg:w-[50%] flex items-center justify-center inset-shadow-sm/18 bg-gray-100/40 ">
+            <div className="backdrop-blur-none">
+              <form onSubmit={handleSignUp}>
+                <div className="flex flex-col gap-y-4">
+                  {inputs.map((input, idx) => (
+                    <label
+                      key={idx}
+                      className="text-2xs font-medium block relative"
+                    >
+                      {input.label} <br />
+                      <div className="relative">
+                        <input
+                          type={
+                            input.name === "password"
+                              ? showPassword
+                                ? "text"
+                                : "password"
+                              : input.type
+                          }
+                          name={input.name}
+                          value={inputValues[input.name]}
+                          onChange={handleChange}
+                          className="border rounded-md px-2 py-1.5 w-80 pr-10 focus:outline-none focus:ring-1 focus:ring-sky-400"
+                          autoComplete="off"
+                        />
+
+                        {/* 👁️ Eye Button - ONLY for password */}
+                        {input.name === "password" && (
+                          <span
+                            onClick={() => setShowPassword(!showPassword)}
+                            className="absolute right-3 top-2 cursor-pointer text-gray-500 text-sm select-none"
+                          >
+                            {showPassword ? "🙈" : "👁️"}
+                          </span>
+                        )}
+                      </div>
+                      {/* 🛑 Show Validation Error */}
+                      {errors[input.name] && (
+                        <p className="text-red-500 text-xs mt-1">
+                          {errors[input.name][0]}
+                        </p>
+                      )}
+                    </label>
+                  ))}
+
+                  <div
+                    className="text-sky-600  hover:text-sky-900"
+                    disabled={loader ? true : false}
+                  >
+                    <Link to="/login">Already have an acc?</Link>
+                  </div>
+                  <button
+                    type="submit"
+                    className="bg-sky-600  py-2 rounded-lg w-40 lg:w-60 text-lg font-semibold text-white cursor-pointer hover:bg-sky-500 hover:scale-102 self-center transition-all"
+                    disabled={loader ? true : false}
+                  >
+                    {" "}
+                    {!loader ? (
+                      <p>Sign Up</p>
+                    ) : (
+                      <p className="animate-pulse [animation-duration:0.6s]">
+                        Signing Up...
+                      </p>
+                    )}
+                  </button>
                 </div>
-                <button type="submit" className="bg-sky-600  py-2 rounded-lg w-40 lg:w-60 text-lg font-semibold text-white cursor-pointer hover:bg-sky-500 hover:scale-102 self-center transition-all" disabled={loader ? true : false}> {!loader ? <p>Sign Up</p> : <p className="animate-pulse [animation-duration:0.6s]">Signing Up...</p>}</button>
-              </div>
-            </form>
+              </form>
+            </div>
           </div>
         </div>
-
       </div>
-    </div>
-
-  </>
+    </>
+  );
 }
 
-export default SignUp
+export default SignUp;
