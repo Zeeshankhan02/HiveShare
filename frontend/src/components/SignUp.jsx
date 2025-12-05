@@ -32,7 +32,9 @@ function SignUp() {
         navigate("/login")
       }
     } catch (error) {
-      alert(error.response.data)
+      console.log(error);
+      
+      alert("Internel Server error")
       
       setLoader(prev => !prev)
     }
